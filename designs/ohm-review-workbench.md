@@ -1,0 +1,45 @@
+# OHM review workbench
+
+Status: design scaffold. No UI is implemented.
+
+## Product intent
+
+Make long LLM responses easier to inspect without losing the agent conversation. The response is the primary document; the scratchpad is a parallel review surface, not a chat replacement.
+
+## Layout direction
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│ OHM · response metadata                         open / copy │
+├───────────────────────────────────────┬─────────────────────┤
+│                                       │                     │
+│ rendered assistant response           │ review scratchpad   │
+│ independently scrollable              │ independently       │
+│                                       │ scrollable           │
+│                                       │                     │
+└───────────────────────────────────────┴─────────────────────┘
+```
+
+Desktop may use a split view. Narrow screens should stack response before scratchpad without hiding either surface or creating horizontal clipping.
+
+## Interaction principles
+
+- Preserve response identity across refreshes so notes do not attach to wrong output.
+- Keep response and scratchpad scroll positions independent.
+- Make copy, open-source, and note actions keyboard reachable.
+- Keep metadata visible but subordinate to response content.
+- Show source state clearly when no response has arrived.
+- Treat links, raw HTML, images, and code as explicit trust boundaries.
+- Respect reduced-motion preferences.
+
+## Candidate web stack
+
+Vue 3 + Vite + Bun. Candidate Markdown pipeline: `markdown-it`, DOMPurify, and Shiki. Confirm package choices in implementation proposal; do not install dependencies for this scaffold.
+
+## Open questions
+
+- File, localhost HTTP, or WebSocket transport?
+- Should response history be session-scoped, project-scoped, or one latest response only?
+- Which Claude transcript events expose enough data for parity with Pi?
+- Should scratchpad persist in browser storage, a local file, or both?
+- How should oversized responses and binary attachments be handled?

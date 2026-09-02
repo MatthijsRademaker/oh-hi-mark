@@ -1,0 +1,14 @@
+{
+  "name": "oh-hi-mark-agent-config",
+  "version": "0.1.0",
+  "private": true,
+  "keywords": ["pi-package"],
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "pi": {
+    "extensions": ["./extensions"],
+    "skills": ["./skills"],
+    "prompts": ["./prompts"]
+  }
+}

@@ -1,0 +1,17 @@
+schema: spec-driven
+
+context: |
+  Product: OHM (Open Harness Markdown), a local browser review workspace for LLM responses.
+  Planned stack: TypeScript, Vue 3, Vite, Bun, and Pi/Claude Code integrations.
+  Current repository state: agent configuration and integration scaffolds only; do not assume the web suite exists.
+  Security boundary: assistant output is untrusted content and must be sanitized before browser rendering.
+
+rules:
+  proposal:
+    - State non-goals and distinguish scaffold work from feature implementation.
+    - Identify Pi and Claude adapter impact when a change crosses harness boundaries.
+  design:
+    - Keep response capture, local transport, and Vue rendering as separate boundaries.
+    - Document response identity, lifecycle, and trust assumptions.
+  tasks:
+    - Keep adapter, transport, frontend, and verification work explicit and independently checkable.

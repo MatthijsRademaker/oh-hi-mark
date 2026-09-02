@@ -1,0 +1,11 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "ohm",
+  "version": "0.1.0",
+  "description": "Open Harness Markdown review workspace for LLM responses",
+  "author": {
+    "name": "Matthijs Rademaker"
+  },
+  "commands": ["./commands"],
+  "skills": ["./skills"]
+}
