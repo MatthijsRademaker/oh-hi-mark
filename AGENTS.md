@@ -11,7 +11,7 @@ OHM (Open Harness Markdown) is a local review workspace for LLM output. The inte
 3. The response is rendered as safe, readable Markdown.
 4. A scratchpad stays available while the coder scrolls and reviews.
 
-Full OHM workspace remains scaffolded. Pi `/ohm` now captures the latest text response on the active branch, writes escaped standalone HTML in the OS temporary directory, and requests the default browser to open it. Claude capture, Vue review UI, Markdown rendering, and scratchpad persistence are not implemented.
+Full OHM workspace remains scaffolded. Pi `/ohm` now captures the latest text response on the active branch, writes a response-specific local app handoff in the OS temporary directory, and requests the default browser to open it. Vue review UI renders safe Markdown with a response-keyed local scratchpad. Claude capture, response history, and live refresh are not implemented.
 
 ## Working rules
 
@@ -51,7 +51,7 @@ Define success criteria before implementation. Run the narrowest relevant checks
 
 | Path | Purpose |
 |---|---|
-| `web/` | Future Vue review suite. Scaffold only until its package manifest exists. |
+| `web/` | Vue review suite source for response rendering and scratchpad review. |
 | `designs/` | Product and interaction decisions for the review workspace. |
 | `.devagent/docs/` | Internal architecture and roadmap notes. |
 | `.agents/` | Human/agent work products: TODOs, findings, handoffs, and reports. |
@@ -63,7 +63,7 @@ Define success criteria before implementation. Run the narrowest relevant checks
 ## Agent configuration
 
 - Edit Pi resources under `.pi/`; do not edit `.claude` symlink targets through an alternate path.
-- `.pi/extensions/ohm/` contains the limited Pi `/ohm` command. It writes escaped latest-response HTML and opens the local file; full review workspace behavior remains future work.
+- `.pi/extensions/ohm/` contains limited Pi `/ohm` command and packaged Vue review assets. It opens response-specific local files; shared transport and full review workspace behavior remain future work.
 - `.claude/commands/ohm.md` is the project-local Claude command stub.
 - `plugins/ohm/` is portable Claude plugin structure. Keep it usable with `claude --plugin-dir ./plugins/ohm`.
 - Keep Pi and Claude adapter behavior aligned, but do not pretend their runtime APIs are interchangeable.

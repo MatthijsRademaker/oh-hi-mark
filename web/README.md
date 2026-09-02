@@ -44,4 +44,4 @@ Packaged grammars: Bash, CSS, diff, Go, HTML, JavaScript, JSON, JSX, Markdown, P
 
 ## Current scope
 
-One latest Pi response, document-first review, copy action, and system/light/dark preference. Scratchpad, response history, live refresh, Claude capture, and remote images remain out of scope.
+One latest Pi response, document-first review, responsive right-side scratchpad, response-keyed local note persistence, copy action, and system/light/dark preference. Response history, live refresh, Claude capture, and remote images remain out of scope.

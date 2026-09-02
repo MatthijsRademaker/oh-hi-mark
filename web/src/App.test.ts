@@ -41,6 +41,12 @@ describe("OHM review shell", () => {
     });
 
     expect(wrapper.text()).toContain("session:entry");
+    expect(
+      wrapper.find('aside[aria-labelledby="scratchpad-heading"]').exists(),
+    ).toBe(true);
+    expect(
+      wrapper.find('textarea[aria-label="Scratchpad notes"]').exists(),
+    ).toBe(true);
     expect(wrapper.find('button[aria-label^="Theme:"]').exists()).toBe(true);
     expect(
       wrapper.find('button[aria-label="Copy response Markdown"]').exists(),

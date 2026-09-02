@@ -138,6 +138,56 @@
   }
 }
 
+.ohm-review-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+  align-items: start;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.ohm-response-column {
+  min-width: 0;
+}
+
+.ohm-scratchpad {
+  position: sticky;
+  top: max(1.25rem, calc(100svh - 26rem));
+  align-self: start;
+  min-width: 0;
+}
+
+.ohm-scratchpad-card {
+  max-height: calc(100svh - 2.5rem);
+  overflow: hidden;
+}
+
+.ohm-scratchpad-notes {
+  display: block;
+  min-height: 14rem;
+  max-height: calc(100svh - 13rem);
+  resize: vertical;
+  overflow-y: auto;
+}
+
+@media (max-width: 63.99rem) {
+  .ohm-review-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ohm-scratchpad {
+    position: static;
+  }
+
+  .ohm-scratchpad-card {
+    max-height: none;
+  }
+
+  .ohm-scratchpad-notes {
+    min-height: 16rem;
+    max-height: none;
+  }
+}
+
 .ohm-atmosphere {
   position: fixed;
   inset: 3.5rem 0 auto;

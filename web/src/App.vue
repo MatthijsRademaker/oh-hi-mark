@@ -14,6 +14,7 @@ import copy from 'copy-to-clipboard'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import Scratchpad from '@/components/Scratchpad.vue'
 import { Separator } from '@/components/ui/separator'
 import { renderMarkdown } from '@/markdown'
 import { readResponseEnvelope } from '@/response-envelope'
@@ -111,11 +112,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="relative min-h-svh overflow-x-hidden bg-background text-foreground">
+  <div class="relative min-h-svh overflow-x-clip bg-background text-foreground">
     <div class="ohm-atmosphere" aria-hidden="true" />
 
     <header class="sticky top-0 z-20 border-b bg-background/88 backdrop-blur-xl">
-      <div class="mx-auto flex min-h-14 max-w-5xl flex-wrap items-center gap-2 px-4 py-2 sm:px-6">
+      <div class="mx-auto flex min-h-14 max-w-6xl flex-wrap items-center gap-2 px-4 py-2 sm:px-6">
         <a
           class="group mr-auto inline-flex items-center gap-2 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           href="#response"
@@ -157,7 +158,7 @@ onUnmounted(() => {
       </div>
     </header>
 
-    <main id="response" class="relative mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 sm:py-16">
+    <main id="response" class="relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-16">
       <Alert v-if="loadError" variant="destructive" class="mx-auto max-w-2xl p-5">
         <TriangleAlert aria-hidden="true" />
         <AlertTitle>Response unavailable</AlertTitle>
@@ -165,39 +166,46 @@ onUnmounted(() => {
       </Alert>
 
       <template v-else-if="envelope">
-        <section aria-labelledby="response-heading" class="mx-auto max-w-3xl">
-          <div class="mb-8 sm:mb-10">
-            <p class="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-              Assistant response
-            </p>
-            <h1 id="response-heading" class="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-              Read with room to think.
-            </h1>
-            <p
-              class="mt-4 max-w-full break-all font-mono text-[0.7rem] leading-relaxed text-muted-foreground sm:break-normal"
-              :title="envelope.responseId"
-            >
-              {{ envelope.responseId }}
-            </p>
-          </div>
-
-          <Separator class="mb-8 sm:mb-10" />
-
-          <div
-            v-if="isRendering"
-            class="flex min-h-64 items-center justify-center rounded-xl border border-dashed bg-card/70 text-sm text-muted-foreground"
-            role="status"
-          >
-            Rendering Markdown…
-          </div>
-
-          <article
-            v-else
-            class="ohm-markdown prose prose-neutral max-w-none dark:prose-invert"
+        <div class="ohm-review-grid">
+          <section
             aria-labelledby="response-heading"
-            v-html="renderedMarkdown"
-          />
-        </section>
+            class="ohm-response-column mx-auto w-full max-w-3xl"
+          >
+            <div class="mb-8 sm:mb-10">
+              <p class="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                Assistant response
+              </p>
+              <h1 id="response-heading" class="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+                Read with room to think.
+              </h1>
+              <p
+                class="mt-4 max-w-full break-all font-mono text-[0.7rem] leading-relaxed text-muted-foreground sm:break-normal"
+                :title="envelope.responseId"
+              >
+                {{ envelope.responseId }}
+              </p>
+            </div>
+
+            <Separator class="mb-8 sm:mb-10" />
+
+            <div
+              v-if="isRendering"
+              class="flex min-h-64 items-center justify-center rounded-xl border border-dashed bg-card/70 text-sm text-muted-foreground"
+              role="status"
+            >
+              Rendering Markdown…
+            </div>
+
+            <article
+              v-else
+              class="ohm-markdown prose prose-neutral max-w-none dark:prose-invert"
+              aria-labelledby="response-heading"
+              v-html="renderedMarkdown"
+            />
+          </section>
+
+          <Scratchpad :response-id="envelope.responseId" />
+        </div>
       </template>
     </main>
 

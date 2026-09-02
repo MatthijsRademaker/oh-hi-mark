@@ -1,6 +1,6 @@
 # OHM review workbench
 
-Status: Pi latest-response document view implemented. Scratchpad workbench remains design scope.
+Status: Pi latest-response document view and response-keyed scratchpad implemented.
 
 ## Product intent
 
@@ -8,7 +8,7 @@ Make long LLM responses easier to inspect without losing the agent conversation.
 
 ## Implemented Pi slice
 
-Current `/ohm` view is a polished single response column with sticky metadata/actions, safe Markdown, local code highlighting, copy control, and system/light/dark themes. It opens directly from private `file://` handoff and has no scratchpad, history, live refresh, or Claude capture.
+Current `/ohm` view is a polished responsive response-and-scratchpad layout with sticky metadata/actions, safe Markdown, local code highlighting, copy control, system/light/dark themes, and locally persisted response-keyed notes. It opens directly from private `file://` handoff and has no history, live refresh, or Claude capture.
 
 ## Layout direction
 
@@ -30,6 +30,8 @@ Desktop may use a split view. Narrow screens should stack response before scratc
 
 - Preserve response identity across refreshes so notes do not attach to wrong output.
 - Keep response and scratchpad scroll positions independent.
+- Keep scratchpad visible at desktop viewport bottom while long responses scroll.
+- Save notes locally under response identity, and show when local storage is unavailable.
 - Make copy, open-source, and note actions keyboard reachable.
 - Keep metadata visible but subordinate to response content.
 - Show source state clearly when no response has arrived.
@@ -45,5 +47,4 @@ Vue 3 + Vite + Bun, Tailwind CSS v4, and shadcn-vue source components. Markdown 
 - Should future live refresh replace current Pi `file://` handoff with localhost HTTP or WebSocket transport?
 - Should response history be session-scoped, project-scoped, or one latest response only?
 - Which Claude transcript events expose enough data for parity with Pi?
-- Should scratchpad persist in browser storage, a local file, or both?
 - How should oversized responses and binary attachments be handled?
