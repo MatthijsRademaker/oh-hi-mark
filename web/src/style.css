@@ -6,8 +6,10 @@
 @plugin "@tailwindcss/typography";
 
 @theme inline {
-  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-sans);
+  --font-sans: "Geist Variable", "Source Han Sans SC", "Noto Sans CJK SC", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+  --font-display: "Kaiti SC", "STKaiti", "KaiTi", "YuKyokasho", "Bradley Hand", cursive;
+  --font-heading: var(--font-serif);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -39,79 +41,84 @@
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --color-seal: var(--ohm-seal);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 1px);
+  --radius-xl: calc(var(--radius) + 2px);
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --radius: 0.125rem;
+  --ohm-ink: #0d0d0d;
+  --ohm-dark-gray: #1e1e1e;
+  --ohm-gray: #4b4b4b;
+  --ohm-stone: #a7a7a7;
+  --ohm-paper: #f6f3ee;
+  --ohm-ink-wash: #e6e1da;
+  --ohm-seal: #b23a2e;
+  --background: #f6f3ee;
+  --foreground: #171716;
+  --card: #f3efe8;
+  --card-foreground: #171716;
+  --popover: #f6f3ee;
+  --popover-foreground: #171716;
+  --primary: #171716;
+  --primary-foreground: #f6f3ee;
+  --secondary: #e6e1da;
+  --secondary-foreground: #1e1e1e;
+  --muted: #ebe7e0;
+  --muted-foreground: #68645f;
+  --accent: #ddd7ce;
+  --accent-foreground: #171716;
+  --destructive: #a7352b;
+  --border: rgb(13 13 13 / 24%);
+  --input: rgb(13 13 13 / 32%);
+  --ring: #b23a2e;
+  --chart-1: #b23a2e;
+  --chart-2: #4b4b4b;
+  --chart-3: #77736d;
+  --chart-4: #a7a7a7;
+  --chart-5: #d0cbc3;
+  --sidebar: #f3efe8;
+  --sidebar-foreground: #171716;
+  --sidebar-primary: #171716;
+  --sidebar-primary-foreground: #f6f3ee;
+  --sidebar-accent: #e6e1da;
+  --sidebar-accent-foreground: #171716;
+  --sidebar-border: rgb(13 13 13 / 20%);
+  --sidebar-ring: #b23a2e;
+  color-scheme: light;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #171716;
+  --foreground: #eeebe5;
+  --card: #211f1c;
+  --card-foreground: #eeebe5;
+  --popover: #211f1c;
+  --popover-foreground: #eeebe5;
+  --primary: #eeeae3;
+  --primary-foreground: #171716;
+  --secondary: #302e2a;
+  --secondary-foreground: #eeebe5;
+  --muted: #2a2825;
+  --muted-foreground: #aaa59d;
+  --accent: #3a3732;
+  --accent-foreground: #f6f3ee;
+  --destructive: #d06052;
+  --border: rgb(246 243 238 / 20%);
+  --input: rgb(246 243 238 / 30%);
+  --ring: #d06052;
+  --sidebar: #211f1c;
+  --sidebar-foreground: #eeebe5;
+  --sidebar-primary: #eeeae3;
+  --sidebar-primary-foreground: #171716;
+  --sidebar-accent: #302e2a;
+  --sidebar-accent-foreground: #eeebe5;
+  --sidebar-border: rgb(246 243 238 / 18%);
+  --sidebar-ring: #d06052;
+  color-scheme: dark;
 }
 
 @layer base {
@@ -129,76 +136,555 @@
   }
 
   button,
-  a {
+  a,
+  textarea {
     -webkit-tap-highlight-color: transparent;
   }
 
-  ::selection {
-    background: color-mix(in oklch, var(--foreground) 14%, transparent);
+  button,
+  a {
+    outline-offset: 3px;
   }
+
+  ::selection {
+    background: color-mix(in srgb, var(--ohm-seal) 24%, transparent);
+  }
+}
+
+.ohm-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+.ohm-shell::before {
+  position: fixed;
+  z-index: -2;
+  inset: 0;
+  background-color: var(--background);
+  background-image:
+    linear-gradient(to bottom, transparent 68%, color-mix(in srgb, var(--background) 14%, transparent)),
+    url("./assets/background-light-mode.png");
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% auto;
+  content: "";
+  pointer-events: none;
+}
+
+.dark .ohm-shell::before {
+  background-image:
+    linear-gradient(to bottom, transparent 68%, color-mix(in srgb, var(--background) 18%, transparent)),
+    url("./assets/background-dark-mode.png");
+}
+
+/* Brand and header */
+.ohm-header {
+  color: var(--ohm-paper);
+  background: transparent;
+}
+
+.ohm-header-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.ohm-brand {
+  border-radius: 2px;
+  color: var(--ohm-paper);
+}
+
+.ohm-brand-mark {
+  display: grid;
+  width: 2.2rem;
+  height: 2.2rem;
+  place-items: center;
+  transform: rotate(-7deg);
+  transition: transform 180ms ease;
+}
+
+.ohm-brand:hover .ohm-brand-mark {
+  transform: rotate(-12deg) scale(1.04);
+}
+
+.ohm-brand-mark svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.ohm-brand-word {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.ohm-seal {
+  display: inline-grid;
+  width: 1.2rem;
+  height: 1.2rem;
+  place-items: center;
+  border: 1px solid currentColor;
+  color: var(--ohm-seal);
+  font-family: var(--font-serif);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ohm-brand-seal {
+  width: 1rem;
+  height: 1.28rem;
+  font-size: 0.58rem;
+  opacity: 0.72;
+}
+
+.ohm-header-badge {
+  height: 2.25rem;
+  border: 1px solid rgb(246 243 238 / 32%);
+  border-radius: 0.35rem;
+  color: var(--ohm-paper);
+  background: rgb(246 243 238 / 5%);
+  padding-inline: 0.8rem;
+  font-weight: 520;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 28%);
+}
+
+.ohm-header .ohm-header-control {
+  min-width: 5.1rem;
+  border-color: rgb(246 243 238 / 32%);
+  border-radius: 0.35rem;
+  color: var(--ohm-paper);
+  background: rgb(246 243 238 / 4%);
+}
+
+.ohm-header .ohm-header-control:hover {
+  background: rgb(246 243 238 / 13%);
+}
+
+.ohm-header .ohm-header-copy {
+  min-width: 5.1rem;
+  border: 1px solid rgb(13 13 13 / 18%);
+  border-radius: 0.35rem;
+  color: var(--ohm-ink);
+  background: var(--ohm-paper);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 24%);
+}
+
+.ohm-header .ohm-header-copy:hover {
+  background: #fff;
+}
+
+.ohm-header-control,
+.ohm-header-copy {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.ohm-header-control::after,
+.ohm-header-copy::after {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 12% 40%, currentColor 0 1px, transparent 2px),
+    radial-gradient(ellipse at 78% 72%, currentColor 0 0.7px, transparent 1.8px),
+    repeating-linear-gradient(103deg, transparent 0 7px, currentColor 8px, transparent 9px 15px);
+  content: "";
+  opacity: 0.065;
+  pointer-events: none;
+}
+
+/* Review layout */
+.ohm-main {
+  z-index: 1;
+  min-height: calc(100svh - 8rem);
 }
 
 .ohm-review-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+  grid-template-columns: minmax(0, 1fr) minmax(19rem, 22rem);
   align-items: start;
-  gap: clamp(2rem, 5vw, 4rem);
+  gap: clamp(2.25rem, 5vw, 4.75rem);
 }
 
 .ohm-response-column {
   min-width: 0;
 }
 
+.ohm-response-masthead {
+  margin-bottom: 1.5rem;
+}
+
+.ohm-eyebrow {
+  margin: 0 0 0.65rem;
+  color: var(--muted-foreground);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.22em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.ohm-title-line {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ohm-title-line h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.45rem, 5vw, 3.8rem);
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.ohm-title-seal {
+  width: 1.35rem;
+  height: 1.8rem;
+  flex: 0 0 auto;
+  transform: rotate(2deg);
+  opacity: 0.82;
+}
+
+.ohm-response-id {
+  max-width: 100%;
+  margin: 0.8rem 0 0;
+  overflow-wrap: anywhere;
+  color: var(--muted-foreground);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.69rem;
+  line-height: 1.6;
+}
+
+.ohm-response-column .ohm-divider {
+  position: relative;
+  height: 1px;
+  margin-bottom: 2.35rem;
+  overflow: visible;
+  background: linear-gradient(to right, var(--foreground), color-mix(in srgb, var(--foreground) 12%, transparent), transparent);
+  opacity: 0.55;
+}
+
+.ohm-divider::before,
+.ohm-divider::after {
+  position: absolute;
+  top: -2px;
+  width: 8px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--foreground);
+  content: "";
+  transform: skewX(-20deg);
+}
+
+.ohm-divider::before {
+  left: 0.3rem;
+}
+
+.ohm-divider::after {
+  left: 1.55rem;
+  width: 5px;
+  opacity: 0.65;
+}
+
+.ohm-rendering,
+.ohm-error-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--card) 86%, transparent);
+  box-shadow: 0 12px 30px rgb(13 13 13 / 7%);
+  backdrop-filter: blur(8px);
+}
+
+.ohm-rendering {
+  display: flex;
+  min-height: 16rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--muted-foreground);
+  font-size: 0.85rem;
+}
+
+.ohm-ink-loader {
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 3px solid color-mix(in srgb, var(--foreground) 16%, transparent);
+  border-top-color: var(--foreground);
+  border-radius: 50%;
+  animation: ohm-spin 800ms linear infinite;
+}
+
+@keyframes ohm-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Scratchpad panel */
 .ohm-scratchpad {
   position: sticky;
-  top: max(1.25rem, calc(100svh - 26rem));
+  top: max(5.5rem, calc(100svh - 29rem));
   align-self: start;
   min-width: 0;
 }
 
 .ohm-scratchpad-card {
-  max-height: calc(100svh - 2.5rem);
+  position: relative;
+  max-height: calc(100svh - 6rem);
   overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--foreground) 42%, transparent);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(94deg, transparent 0 12%, color-mix(in srgb, var(--foreground) 2.5%, transparent) 49%, transparent 82%),
+    radial-gradient(ellipse at 100% 0, color-mix(in srgb, var(--foreground) 5%, transparent), transparent 31%),
+    color-mix(in srgb, var(--card) 91%, transparent);
+  padding: 1.4rem;
+  box-shadow:
+    0 14px 28px rgb(13 13 13 / 10%),
+    inset 0 0 22px rgb(13 13 13 / 2%),
+    3px 2px 0 -2px color-mix(in srgb, var(--foreground) 30%, transparent),
+    -2px -1px 0 -1px color-mix(in srgb, var(--foreground) 12%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.ohm-scratchpad-card::before {
+  position: absolute;
+  z-index: -1;
+  right: -1.2rem;
+  bottom: -1.1rem;
+  width: 9rem;
+  height: 5rem;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--foreground) 9%, transparent), transparent 68%);
+  content: "";
+  transform: rotate(-11deg);
+}
+
+.ohm-panel-corner {
+  position: absolute;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-color: color-mix(in srgb, var(--foreground) 58%, transparent);
+  pointer-events: none;
+}
+
+.ohm-panel-corner-top {
+  top: 0.22rem;
+  right: 0.22rem;
+  border-top: 2px solid;
+  border-right: 2px solid;
+}
+
+.ohm-panel-corner-bottom {
+  bottom: 0.22rem;
+  left: 0.22rem;
+  border-bottom: 2px solid;
+  border-left: 2px solid;
+}
+
+.ohm-scratch-bamboo {
+  position: absolute;
+  top: 4rem;
+  right: 0.55rem;
+  width: 1px;
+  height: 5.3rem;
+  background: color-mix(in srgb, var(--foreground) 37%, transparent);
+  transform: rotate(28deg);
+  transform-origin: bottom;
+  pointer-events: none;
+}
+
+.ohm-scratch-bamboo::before,
+.ohm-scratch-bamboo::after {
+  position: absolute;
+  width: 2.3rem;
+  height: 0.9rem;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 38%, transparent);
+  border-radius: 55% 0;
+  content: "";
+  transform-origin: left;
+}
+
+.ohm-scratch-bamboo::before {
+  top: 1.1rem;
+  left: 0;
+  transform: rotate(-30deg) skewX(-18deg);
+}
+
+.ohm-scratch-bamboo::after {
+  top: 2.9rem;
+  left: 0;
+  transform: rotate(26deg) skewX(18deg);
+}
+
+.ohm-scratchpad-header {
+  position: relative;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-right: 0.2rem;
+}
+
+.ohm-calligraphy-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.6rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ohm-calligraphy-label .ohm-seal {
+  width: 0.9rem;
+  height: 1.1rem;
+  font-size: 0.52rem;
+}
+
+.ohm-scratchpad-header .ohm-eyebrow {
+  margin-bottom: 0.35rem;
+  opacity: 0.62;
+}
+
+.ohm-scratchpad-header h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 1.28rem;
+  font-weight: 620;
+  letter-spacing: -0.015em;
+}
+
+.ohm-unsaved-badge {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  min-width: 6.4rem;
+  min-height: 2rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.2rem;
+  padding: 0.25rem 0.85rem;
+  color: var(--primary-foreground);
+  font-size: 0.67rem;
+  font-weight: 570;
+  letter-spacing: 0.045em;
+  text-shadow: 0 1px rgb(13 13 13 / 18%);
+}
+
+.ohm-unsaved-badge > span {
+  position: relative;
+  z-index: 1;
 }
 
 .ohm-scratchpad-notes {
   display: block;
-  min-height: 14rem;
-  max-height: calc(100svh - 13rem);
+  width: 100%;
+  min-height: 13.5rem;
+  max-height: calc(100svh - 18.5rem);
+  margin-top: 1.25rem;
   resize: vertical;
   overflow-y: auto;
+  border: 1px solid var(--input);
+  border-radius: var(--radius);
+  outline: none;
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--background) 68%, transparent);
+  padding: 0.9rem;
+  font-family: var(--font-serif);
+  font-size: 0.94rem;
+  line-height: 1.65;
+  box-shadow: inset 0 2px 8px rgb(13 13 13 / 3%);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
-@media (max-width: 63.99rem) {
-  .ohm-review-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .ohm-scratchpad {
-    position: static;
-  }
-
-  .ohm-scratchpad-card {
-    max-height: none;
-  }
-
-  .ohm-scratchpad-notes {
-    min-height: 16rem;
-    max-height: none;
-  }
+.ohm-scratchpad-notes::placeholder {
+  color: color-mix(in srgb, var(--muted-foreground) 72%, transparent);
 }
 
-.ohm-atmosphere {
-  position: fixed;
-  inset: 3.5rem 0 auto;
-  height: min(34rem, 66vh);
+.ohm-scratchpad-notes:focus-visible {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent), inset 0 2px 8px rgb(13 13 13 / 3%);
+}
+
+.ohm-scratchpad-footer {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.ohm-scratchpad-footer p {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.ohm-ink-stroke {
+  position: absolute;
+  z-index: 0;
+  inset: -0.38rem -0.62rem;
+  width: calc(100% + 1.24rem);
+  height: calc(100% + 0.76rem);
+  overflow: visible;
+  color: var(--primary);
+  filter: drop-shadow(0 3px 3px rgb(13 13 13 / 18%));
   pointer-events: none;
-  background:
-    radial-gradient(circle at 24% 8%, color-mix(in oklch, var(--foreground) 5%, transparent), transparent 36%),
-    linear-gradient(to bottom, color-mix(in oklch, var(--muted) 60%, transparent), transparent 72%);
-  mask-image: linear-gradient(to bottom, black, transparent);
+  transition: color 150ms ease, transform 150ms ease, filter 150ms ease;
 }
 
+.ohm-ink-stroke-body {
+  fill: currentColor;
+}
+
+.ohm-ink-stroke-layer {
+  fill: color-mix(in srgb, currentColor 72%, transparent);
+}
+
+.ohm-ink-bristles {
+  stroke-width: 2.2;
+  opacity: 0.72;
+}
+
+.ohm-scratchpad .ohm-brush-button {
+  position: relative;
+  isolation: isolate;
+  min-width: 8.8rem;
+  min-height: 2.35rem;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  color: var(--primary-foreground);
+  background: transparent;
+  box-shadow: none;
+}
+
+.ohm-brush-button > :not(.ohm-ink-stroke) {
+  position: relative;
+  z-index: 1;
+}
+
+.ohm-brush-button:hover .ohm-ink-stroke {
+  color: color-mix(in srgb, var(--primary) 88%, var(--ohm-seal));
+  filter: drop-shadow(0 4px 4px rgb(13 13 13 / 23%));
+  transform: translateY(-1px) scaleX(1.015);
+}
+
+.ohm-brush-button:active .ohm-ink-stroke {
+  filter: drop-shadow(0 1px 1px rgb(13 13 13 / 18%));
+  transform: translateY(1px) scaleX(0.99);
+}
+
+.ohm-brush-button:focus-visible {
+  border-radius: 0.25rem;
+}
+
+/* Markdown document */
 .ohm-markdown {
   --tw-prose-body: var(--foreground);
   --tw-prose-headings: var(--foreground);
@@ -209,16 +695,20 @@
   --tw-prose-bullets: var(--muted-foreground);
   --tw-prose-hr: var(--border);
   --tw-prose-quotes: var(--foreground);
-  --tw-prose-quote-borders: var(--border);
+  --tw-prose-quote-borders: var(--ohm-seal);
   --tw-prose-captions: var(--muted-foreground);
   --tw-prose-code: var(--foreground);
   --tw-prose-pre-code: inherit;
   --tw-prose-pre-bg: transparent;
   --tw-prose-th-borders: var(--border);
   --tw-prose-td-borders: var(--border);
+  position: relative;
   overflow-wrap: anywhere;
-  font-size: 1.0625rem;
-  line-height: 1.78;
+  font-family: var(--font-serif);
+  font-size: 1.04rem;
+  letter-spacing: 0.006em;
+  line-height: 1.86;
+  text-rendering: optimizeLegibility;
 }
 
 .ohm-markdown > :first-child {
@@ -226,13 +716,97 @@
 }
 
 .ohm-markdown :where(h1, h2, h3, h4) {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  font-family: var(--font-serif);
+  font-weight: 680;
+  letter-spacing: -0.018em;
+  line-height: 1.28;
+  scroll-margin-top: 5.5rem;
   text-wrap: balance;
-  letter-spacing: -0.025em;
-  scroll-margin-top: 5rem;
+}
+
+.ohm-markdown :where(h1, h2) {
+  z-index: 0;
+  isolation: isolate;
+  font-family: var(--font-display);
+}
+
+.ohm-markdown :where(h1) {
+  margin-bottom: 1.35em;
+  font-size: 2.3rem;
+}
+
+.ohm-markdown :where(h1)::after,
+.ohm-markdown :where(h2)::after {
+  position: absolute;
+  z-index: -1;
+  right: -0.45rem;
+  bottom: -0.16rem;
+  left: -0.35rem;
+  height: 0.48rem;
+  clip-path: polygon(0 38%, 11% 26%, 29% 33%, 46% 12%, 68% 27%, 88% 8%, 100% 41%, 94% 64%, 72% 61%, 52% 82%, 27% 65%, 4% 78%);
+  background: color-mix(in srgb, var(--foreground) 16%, transparent);
+  content: "";
+  transform: rotate(-0.6deg);
+}
+
+.ohm-markdown :where(h2) {
+  border: 0;
+  padding-bottom: 0.25rem;
+}
+
+.ohm-markdown :where(h2)::after {
+  right: 8%;
+  height: 0.3rem;
+  background: color-mix(in srgb, var(--ohm-seal) 23%, transparent);
+}
+
+.ohm-markdown :where(h3) {
+  padding-inline-start: 1rem;
+}
+
+.ohm-markdown :where(h3)::before {
+  position: absolute;
+  top: 0.45em;
+  left: 0;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 68% 42% 61% 35%;
+  background: var(--foreground);
+  box-shadow: 0.18rem 0.08rem 0 -0.12rem color-mix(in srgb, var(--foreground) 55%, transparent);
+  content: "";
+  transform: rotate(24deg);
+}
+
+.ohm-markdown :where(p) {
+  text-wrap: pretty;
+}
+
+.ohm-markdown > :where(p:first-of-type)::first-letter {
+  font-family: var(--font-display);
+  font-size: 1.16em;
+  font-weight: 720;
+}
+
+.ohm-markdown :where(strong) {
+  background: linear-gradient(to top, color-mix(in srgb, var(--ohm-seal) 15%, transparent) 0 32%, transparent 33%);
+  font-weight: 720;
+}
+
+.ohm-markdown :where(hr) {
+  height: 0.55rem;
+  margin-block: 2.7rem;
+  border: 0;
+  clip-path: polygon(0 47%, 8% 31%, 24% 42%, 46% 24%, 71% 39%, 92% 19%, 100% 45%, 92% 61%, 66% 57%, 45% 72%, 21% 58%, 5% 69%);
+  background: linear-gradient(to right, transparent, color-mix(in srgb, var(--foreground) 64%, transparent) 9% 89%, transparent);
+  opacity: 0.62;
 }
 
 .ohm-markdown :where(a) {
-  text-decoration-color: color-mix(in oklch, var(--foreground) 36%, transparent);
+  color: color-mix(in srgb, var(--foreground) 88%, var(--ohm-seal));
+  text-decoration-color: color-mix(in srgb, var(--ohm-seal) 58%, transparent);
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.2em;
   transition: text-decoration-color 150ms ease;
@@ -243,24 +817,90 @@
 }
 
 .ohm-markdown :where(a:focus-visible) {
-  border-radius: 0.2rem;
+  border-radius: 0.1rem;
   outline: 2px solid var(--ring);
   outline-offset: 3px;
 }
 
 .ohm-markdown :where(blockquote) {
-  border-inline-start-width: 0.2rem;
-  border-inline-start-color: var(--foreground);
+  position: relative;
+  margin-inline: 0.25rem;
+  overflow: hidden;
+  border: 0;
+  border-inline-start: 0.22rem solid var(--ohm-seal);
+  color: color-mix(in srgb, var(--foreground) 82%, transparent);
+  background:
+    linear-gradient(96deg, color-mix(in srgb, var(--foreground) 7%, transparent), transparent 72%),
+    color-mix(in srgb, var(--card) 58%, transparent);
+  padding: 1rem 1.4rem 1rem 1.55rem;
+  clip-path: polygon(0.15% 1%, 99.2% 0, 100% 96%, 78% 99%, 52% 97%, 22% 100%, 0 96%);
+  font-family: var(--font-serif);
   font-style: normal;
 }
 
+.ohm-markdown :where(blockquote)::after {
+  position: absolute;
+  top: -1.2rem;
+  right: 0.6rem;
+  color: color-mix(in srgb, var(--foreground) 8%, transparent);
+  content: "“";
+  font-family: var(--font-display);
+  font-size: 6rem;
+  line-height: 1;
+}
+
+.ohm-markdown :where(ul, ol) {
+  padding-inline-start: 1.8rem;
+}
+
+.ohm-markdown :where(ul) {
+  list-style: none;
+}
+
+.ohm-markdown :where(ul > li) {
+  position: relative;
+}
+
+.ohm-markdown :where(ul > li)::before {
+  position: absolute;
+  top: 0.74em;
+  left: -1.45rem;
+  width: 0.52rem;
+  height: 0.42rem;
+  border: 1.5px solid color-mix(in srgb, var(--foreground) 82%, transparent);
+  border-radius: 70% 38% 67% 41%;
+  content: "";
+  transform: rotate(-16deg);
+}
+
+.ohm-markdown :where(ul > li)::after {
+  position: absolute;
+  top: 0.92em;
+  left: -1.15rem;
+  width: 0.62rem;
+  height: 1px;
+  background: color-mix(in srgb, var(--foreground) 62%, transparent);
+  content: "";
+  transform: rotate(-8deg);
+}
+
+.ohm-markdown :where(ol > li)::marker {
+  color: color-mix(in srgb, var(--foreground) 78%, var(--ohm-seal));
+  font-family: var(--font-display);
+  font-size: 1.08em;
+  font-weight: 750;
+}
+
 .ohm-markdown :where(:not(pre) > code) {
-  border: 1px solid var(--border);
-  border-radius: 0.35rem;
-  background: var(--muted);
-  padding: 0.12rem 0.35rem;
-  font-size: 0.86em;
-  font-weight: 500;
+  border: 1px solid color-mix(in srgb, var(--foreground) 16%, transparent);
+  border-radius: 0.15rem;
+  background:
+    linear-gradient(102deg, transparent, color-mix(in srgb, var(--foreground) 4%, transparent) 52%, transparent),
+    color-mix(in srgb, var(--muted) 84%, transparent);
+  padding: 0.12rem 0.38rem;
+  color: color-mix(in srgb, var(--foreground) 82%, #17446c);
+  font-size: 0.85em;
+  font-weight: 560;
 }
 
 .ohm-markdown :where(:not(pre) > code)::before,
@@ -269,12 +909,27 @@
 }
 
 .ohm-markdown :where(pre.shiki) {
+  position: relative;
   max-width: 100%;
   overflow-x: auto;
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
-  padding: 1.1rem 1.2rem;
-  box-shadow: 0 1px 0 color-mix(in oklch, var(--foreground) 4%, transparent);
+  border: 0;
+  border-radius: 0;
+  padding: 1.25rem 1.4rem;
+  clip-path: polygon(0.35% 2%, 18% 0.6%, 41% 1.8%, 63% 0, 82% 1.4%, 99.5% 0.5%, 100% 96%, 84% 99.3%, 61% 98%, 42% 100%, 19% 98.5%, 0 99%);
+  box-shadow: 0 7px 18px rgb(13 13 13 / 13%), inset 0 0 0 1px rgb(246 243 238 / 8%);
+}
+
+.ohm-markdown :where(pre.shiki)::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4.6rem;
+  height: 100%;
+  background:
+    radial-gradient(ellipse at 82% 18%, rgb(230 225 218 / 7%) 0 1px, transparent 2px),
+    repeating-linear-gradient(118deg, transparent 0 11px, rgb(230 225 218 / 4%) 12px, transparent 14px 22px);
+  content: "";
+  pointer-events: none;
 }
 
 .ohm-markdown :where(pre.shiki code) {
@@ -282,8 +937,8 @@
   min-width: max-content;
   background: transparent;
   padding: 0;
-  font-size: 0.875rem;
-  line-height: 1.7;
+  font-size: 0.86rem;
+  line-height: 1.75;
 }
 
 .dark .ohm-markdown :where(.shiki),
@@ -299,16 +954,36 @@
   display: block;
   max-width: 100%;
   overflow-x: auto;
+  border-collapse: collapse;
+  border-block: 2px solid color-mix(in srgb, var(--foreground) 62%, transparent);
+  background: color-mix(in srgb, var(--card) 46%, transparent);
+  box-shadow: 0 7px 18px rgb(13 13 13 / 5%);
   white-space: nowrap;
+}
+
+.ohm-markdown :where(th) {
+  color: var(--primary-foreground);
+  background:
+    linear-gradient(97deg, transparent, rgb(246 243 238 / 7%), transparent),
+    var(--primary);
+  font-family: var(--font-serif);
+  letter-spacing: 0.035em;
+}
+
+.ohm-markdown :where(tr:nth-child(even) td) {
+  background: color-mix(in srgb, var(--foreground) 3.5%, transparent);
 }
 
 .ohm-markdown :where(.ohm-image-placeholder) {
   display: inline-flex;
   max-width: 100%;
   align-items: center;
-  border: 1px dashed var(--border);
-  border-radius: 0.5rem;
-  background: var(--muted);
+  border: 1px dashed color-mix(in srgb, var(--foreground) 38%, transparent);
+  border-radius: 0;
+  background:
+    linear-gradient(98deg, transparent, color-mix(in srgb, var(--foreground) 4%, transparent), transparent),
+    color-mix(in srgb, var(--muted) 82%, transparent);
+  clip-path: polygon(1% 5%, 98% 0, 100% 89%, 3% 100%, 0 54%);
   padding: 0.35rem 0.55rem;
   color: var(--muted-foreground);
   font-size: 0.8rem;
@@ -316,16 +991,112 @@
   line-height: 1.4;
 }
 
+/* Footer */
+.ohm-footer {
+  z-index: 1;
+  padding: 1.7rem 1rem 1.35rem;
+}
+
+.ohm-footer::before {
+  display: block;
+  width: min(34rem, 72vw);
+  height: 1px;
+  margin: 0 auto 1rem;
+  background: linear-gradient(to right, transparent, color-mix(in srgb, var(--foreground) 42%, transparent), transparent);
+  content: "";
+}
+
+.ohm-footer span {
+  padding-inline: 0.85rem;
+  background: color-mix(in srgb, var(--background) 72%, transparent);
+  box-decoration-break: clone;
+}
+
+@media (max-width: 63.99rem) {
+  .ohm-review-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ohm-response-column {
+    max-width: 48rem;
+  }
+
+  .ohm-scratchpad {
+    position: static;
+    width: 100%;
+    max-width: 48rem;
+    margin-inline: auto;
+  }
+
+  .ohm-scratchpad-card {
+    max-height: none;
+  }
+
+  .ohm-scratchpad-notes {
+    min-height: 16rem;
+    max-height: none;
+  }
+
+}
+
 @media (max-width: 40rem) {
+  .ohm-header-inner {
+    min-height: 3.65rem;
+  }
+
+  .ohm-brand-word {
+    font-size: 1.2rem;
+  }
+
+  .ohm-brand-mark {
+    width: 1.9rem;
+    height: 1.9rem;
+  }
+
+  .ohm-brand-seal {
+    display: none;
+  }
+
+  .ohm-header-control,
+  .ohm-header-copy {
+    min-width: auto;
+  }
+
+  .ohm-main {
+    padding-top: 2.4rem;
+  }
+
+  .ohm-title-line {
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+
+  .ohm-title-line h1 {
+    font-size: clamp(2.2rem, 12vw, 3rem);
+  }
+
+
+  .ohm-scratchpad-card {
+    padding: 1.15rem;
+  }
+
+  .ohm-scratchpad-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ohm-brush-button {
+    align-self: flex-end;
+  }
+
   .ohm-markdown {
-    font-size: 1rem;
-    line-height: 1.72;
+    font-size: 0.98rem;
+    line-height: 1.75;
   }
 
   .ohm-markdown :where(pre.shiki) {
-    margin-inline: -0.35rem;
-    border-radius: 0.6rem;
-    padding: 0.9rem;
+    margin-inline: -0.25rem;
+    padding: 1rem;
   }
 }
 
