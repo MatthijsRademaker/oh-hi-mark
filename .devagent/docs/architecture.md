@@ -30,4 +30,4 @@ Adapters should produce one shared response envelope. The web suite should not r
 
 ## Current state
 
-No response envelope, transport, Vue application, or hook implementation exists yet. Keep this document architectural; implementation belongs in an OpenSpec change.
+Pi has a limited `/ohm` adapter that selects the latest active-branch assistant text, writes an escaped standalone HTML file in the OS temporary directory, and requests the platform browser to open it. No shared response envelope, long-lived local transport, Vue application, scratchpad, or Claude hook implementation exists yet. Keep those boundaries architectural; future implementation belongs in separate OpenSpec changes.

@@ -4,7 +4,7 @@ OHM (Open Harness Markdown) is planned as a local browser review workspace for L
 
 ## Status
 
-Scaffold only. `/ohm` is wired as a Pi and Claude entrypoint, but response capture, browser launch, Markdown rendering, and scratchpad persistence are not implemented.
+Limited Pi slice. `/ohm` captures the active branch's latest assistant text, writes escaped standalone HTML under the OS temporary directory, and opens the default browser. Claude capture, Vue review UI, Markdown rendering, and scratchpad persistence remain scaffolded.
 
 ## Planned flow
 
@@ -22,7 +22,7 @@ local transport + Vue review suite
 
 ## Repository setup
 
-- `.pi/` — canonical Pi package, extension stub, OpenSpec prompts, skills, rules, and settings.
+- `.pi/` — canonical Pi package, latest-response HTML extension, OpenSpec prompts, skills, rules, and settings.
 - `.claude/` — Claude Code adapter and project-local `/ohm` command.
 - `plugins/ohm/` — standalone Claude Code plugin scaffold.
 - `.agents/` — agent work-product directories.
@@ -31,9 +31,10 @@ local transport + Vue review suite
 
 Read [`AGENTS.md`](./AGENTS.md) before changing this repository.
 
-## Validate scaffolding
+## Validate repository
 
 ```bash
+node --experimental-strip-types --test .pi/extensions/ohm/index.test.ts
 claude plugin validate plugins/ohm
 openspec list --json
 ```

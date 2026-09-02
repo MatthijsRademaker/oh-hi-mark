@@ -24,4 +24,4 @@ Read these sources before making a feature change:
 - Response identity must be stable and explicit.
 - Assistant output is untrusted content. Sanitize at the rendering boundary.
 - Keep the first implementation latest-response-only unless a proposal explicitly adds history.
-- `/ohm` is currently a stub. Do not describe it as functional until adapter, transport, browser, and scratchpad tests exist.
+- `/ohm` has a limited Pi-only HTML handoff. Do not describe full OHM workspace as functional until shared transport, Vue browser workspace, and scratchpad tests exist.
