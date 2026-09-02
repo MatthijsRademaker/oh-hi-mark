@@ -1,10 +1,14 @@
 # OHM review workbench
 
-Status: design scaffold. No UI is implemented.
+Status: Pi latest-response document view implemented. Scratchpad workbench remains design scope.
 
 ## Product intent
 
 Make long LLM responses easier to inspect without losing the agent conversation. The response is the primary document; the scratchpad is a parallel review surface, not a chat replacement.
+
+## Implemented Pi slice
+
+Current `/ohm` view is a polished single response column with sticky metadata/actions, safe Markdown, local code highlighting, copy control, and system/light/dark themes. It opens directly from private `file://` handoff and has no scratchpad, history, live refresh, or Claude capture.
 
 ## Layout direction
 
@@ -32,13 +36,13 @@ Desktop may use a split view. Narrow screens should stack response before scratc
 - Treat links, raw HTML, images, and code as explicit trust boundaries.
 - Respect reduced-motion preferences.
 
-## Candidate web stack
+## Web stack
 
-Vue 3 + Vite + Bun. Candidate Markdown pipeline: `markdown-it`, DOMPurify, and Shiki. Confirm package choices in implementation proposal; do not install dependencies for this scaffold.
+Vue 3 + Vite + Bun, Tailwind CSS v4, and shadcn-vue source components. Markdown pipeline uses `markdown-it`, explicit local Shiki grammars/themes, and final DOMPurify sanitization. Raw response HTML is disabled and Markdown images become inert placeholders.
 
 ## Open questions
 
-- File, localhost HTTP, or WebSocket transport?
+- Should future live refresh replace current Pi `file://` handoff with localhost HTTP or WebSocket transport?
 - Should response history be session-scoped, project-scoped, or one latest response only?
 - Which Claude transcript events expose enough data for parity with Pi?
 - Should scratchpad persist in browser storage, a local file, or both?

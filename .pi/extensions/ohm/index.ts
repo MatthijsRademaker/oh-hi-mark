@@ -9,7 +9,7 @@ import { findLatestAssistantResponse } from "./response.ts";
 
 export default function ohmExtension(pi: ExtensionAPI): void {
   pi.registerCommand("ohm", {
-    description: "Open latest assistant response as local HTML",
+    description: "Open latest assistant response in OHM review app",
     handler: async (_args: string, ctx: ExtensionCommandContext) => {
       await ctx.waitForIdle();
 
@@ -33,7 +33,7 @@ export default function ohmExtension(pi: ExtensionAPI): void {
         const errorMessage =
           error instanceof Error ? error.message : String(error);
         ctx.ui.notify(
-          `OHM could not write response HTML: ${errorMessage}`,
+          `OHM could not prepare review app: ${errorMessage}`,
           "error",
         );
         return;
@@ -45,13 +45,13 @@ export default function ohmExtension(pi: ExtensionAPI): void {
         const errorMessage =
           error instanceof Error ? error.message : String(error);
         ctx.ui.notify(
-          `OHM saved response HTML to ${outputPath}, but browser launch failed: ${errorMessage}`,
+          `OHM prepared review app at ${outputPath}, but browser launch failed: ${errorMessage}`,
           "warning",
         );
         return;
       }
 
-      ctx.ui.notify(`OHM opened response HTML: ${outputPath}`, "info");
+      ctx.ui.notify(`OHM opened review app: ${outputPath}`, "info");
     },
   });
 }

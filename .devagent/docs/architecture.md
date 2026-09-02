@@ -21,13 +21,17 @@ agent harness
 
 Adapters should produce one shared response envelope. The web suite should not read Pi or Claude session files directly.
 
-## Future boundaries
+## Boundaries
 
-- **Pi adapter:** observe the current session branch, select latest assistant content, and invoke the local review transport from `/ohm`.
-- **Claude adapter:** use Claude Code command and hook contracts to identify the current transcript and latest assistant response.
-- **Transport:** local-only endpoint or file-backed handoff with explicit response identity and lifecycle.
-- **Web:** Vue application that renders the envelope and stores scratchpad text keyed by response identity.
+- **Pi adapter:** observes current session branch, selects latest assistant text, creates explicit response envelope, and invokes local review transport from `/ohm`.
+- **Claude adapter:** will use Claude Code command and hook contracts to identify current transcript and latest assistant response.
+- **Transport:** Pi currently uses deterministic private `file://` handoff keyed by response identity. Long-lived refresh transport remains future work.
+- **Web:** Vue application renders one embedded envelope. Future scratchpad storage must remain keyed by response identity.
 
 ## Current state
 
-Pi has a limited `/ohm` adapter that selects the latest active-branch assistant text, writes an escaped standalone HTML file in the OS temporary directory, and requests the platform browser to open it. No shared response envelope, long-lived local transport, Vue application, scratchpad, or Claude hook implementation exists yet. Keep those boundaries architectural; future implementation belongs in separate OpenSpec changes.
+Pi `/ohm` produces `{ responseId, sessionId, entryId, text }`, safely embeds envelope in packaged Vue application entry, copies trusted local assets beneath OS temporary directory, and requests platform browser to open response-specific file. Vite emits a file-protocol-safe classic bundle because Chromium blocks external ES modules from `file://` pages.
+
+Browser app uses `markdown-it` with raw HTML disabled, Shiki core with explicit local grammars/themes, final DOMPurify sanitization, inert image placeholders, and no remote startup dependencies. It provides document-first response view, copy action, responsive overflow behavior, and system/light/dark themes.
+
+Claude adapter, shared cross-harness transport, response history, live refresh, and response-keyed scratchpad do not exist yet.

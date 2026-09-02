@@ -1,0 +1,15 @@
+{
+  "name": "oh-hi-mark",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "bun@1.3.2",
+  "scripts": {
+    "setup": "cd web && bun install --frozen-lockfile",
+    "dev": "cd web && bun install --frozen-lockfile && bun run dev",
+    "typecheck": "cd web && bun install --frozen-lockfile && bun run typecheck",
+    "test": "cd web && bun install --frozen-lockfile && bun run test",
+    "build": "cd web && bun install --frozen-lockfile && bun run build",
+    "verify": "bun run test && bun run build",
+    "preview": "cd web && bun install --frozen-lockfile && bun run preview"
+  }
+}

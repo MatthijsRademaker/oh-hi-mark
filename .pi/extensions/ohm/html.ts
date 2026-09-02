@@ -1,105 +1,71 @@
-import { chmod, mkdir, writeFile } from "node:fs/promises";
+import {
+  chmod,
+  cp,
+  mkdir,
+  readFile,
+  readdir,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import type { LatestAssistantResponse } from "./response.ts";
 
-const HTML_ESCAPES: Record<string, string> = {
-  "&": "&amp;",
-  "<": "&lt;",
-  ">": "&gt;",
-  '"': "&quot;",
-  "'": "&#39;",
-};
+export const RESPONSE_PAYLOAD_PLACEHOLDER = "__OHM_RESPONSE_PAYLOAD__";
 
-export function escapeHtml(value: string): string {
-  return value.replace(/[&<>"']/g, (character) => HTML_ESCAPES[character]);
-}
+const PACKAGED_APP_DIRECTORY = fileURLToPath(
+  new URL("./generated", import.meta.url),
+);
+const JSON_SCRIPT_ESCAPES: Record<string, string> = {
+  "&": "\\u0026",
+  "<": "\\u003c",
+  ">": "\\u003e",
+  "\u2028": "\\u2028",
+  "\u2029": "\\u2029",
+};
 
 function safeFilePart(value: string): string {
   const filePart = encodeURIComponent(value);
   return filePart || "response";
 }
 
-export function renderResponseHtml(response: LatestAssistantResponse): string {
-  const responseId = escapeHtml(response.responseId);
-  const responseText = escapeHtml(response.text);
+export function serializeResponseEnvelope(
+  response: LatestAssistantResponse,
+): string {
+  return JSON.stringify(response).replace(
+    /[<>&\u2028\u2029]/g,
+    (character) => JSON_SCRIPT_ESCAPES[character],
+  );
+}
 
-  return `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="ohm-response-id" content="${responseId}">
-    <title>OHM · Assistant response</title>
-    <style>
-      :root {
-        color-scheme: light dark;
-        font-family: ui-sans-serif, system-ui, sans-serif;
-      }
+export function renderResponseHtml(
+  response: LatestAssistantResponse,
+  appTemplate: string,
+): string {
+  const placeholderIndex = appTemplate.indexOf(RESPONSE_PAYLOAD_PLACEHOLDER);
+  if (placeholderIndex === -1) {
+    throw new Error(
+      `Packaged OHM app template is missing ${RESPONSE_PAYLOAD_PLACEHOLDER}.`,
+    );
+  }
 
-      body {
-        margin: 0;
-        background: Canvas;
-        color: CanvasText;
-      }
+  if (
+    appTemplate.indexOf(
+      RESPONSE_PAYLOAD_PLACEHOLDER,
+      placeholderIndex + RESPONSE_PAYLOAD_PLACEHOLDER.length,
+    ) !== -1
+  ) {
+    throw new Error(
+      `Packaged OHM app template contains multiple ${RESPONSE_PAYLOAD_PLACEHOLDER} markers.`,
+    );
+  }
 
-      main {
-        box-sizing: border-box;
-        max-width: 72rem;
-        margin: 0 auto;
-        padding: clamp(1rem, 4vw, 3rem);
-      }
-
-      header {
-        border-bottom: 1px solid color-mix(in srgb, CanvasText 20%, transparent);
-        margin-bottom: 2rem;
-        padding-bottom: 1rem;
-      }
-
-      h1 {
-        margin: 0;
-        font-size: clamp(1.5rem, 3vw, 2.25rem);
-      }
-
-      .eyebrow {
-        margin: 0 0 0.5rem;
-        color: GrayText;
-        font-size: 0.8rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .response-id {
-        margin: 0.75rem 0 0;
-        color: GrayText;
-        font-family: ui-monospace, SFMono-Regular, monospace;
-        font-size: 0.75rem;
-        overflow-wrap: anywhere;
-      }
-
-      pre {
-        margin: 0;
-        white-space: pre-wrap;
-        overflow-wrap: anywhere;
-        font: inherit;
-        line-height: 1.65;
-      }
-    </style>
-  </head>
-  <body>
-    <main>
-      <header>
-        <p class="eyebrow">OHM · latest response</p>
-        <h1>Assistant response</h1>
-        <p class="response-id">${responseId}</p>
-      </header>
-      <pre>${responseText}</pre>
-    </main>
-  </body>
-</html>
-`;
+  return appTemplate.replace(
+    RESPONSE_PAYLOAD_PLACEHOLDER,
+    serializeResponseEnvelope(response),
+  );
 }
 
 export function getResponseHtmlPath(
@@ -113,16 +79,46 @@ export function getResponseHtmlPath(
   );
 }
 
+async function copyPackagedAssets(
+  appDirectory: string,
+  outputDirectory: string,
+): Promise<void> {
+  const entries = await readdir(appDirectory, { withFileTypes: true });
+  for (const entry of entries) {
+    if (entry.name === "index.html") continue;
+
+    const targetPath = join(outputDirectory, entry.name);
+    await rm(targetPath, { recursive: true, force: true });
+    await cp(join(appDirectory, entry.name), targetPath, {
+      recursive: true,
+      force: true,
+    });
+  }
+}
+
 export async function writeResponseHtml(
   response: LatestAssistantResponse,
   temporaryDirectory = tmpdir(),
+  appDirectory = PACKAGED_APP_DIRECTORY,
 ): Promise<string> {
-  const outputDirectory = resolve(temporaryDirectory, "ohm");
   const outputPath = getResponseHtmlPath(response, temporaryDirectory);
+  const outputDirectory = dirname(outputPath);
+  const templatePath = join(appDirectory, "index.html");
+
+  let appTemplate: string;
+  try {
+    appTemplate = await readFile(templatePath, "utf8");
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(
+      `Could not read packaged OHM app at ${templatePath}: ${message}`,
+    );
+  }
 
   await mkdir(outputDirectory, { recursive: true, mode: 0o700 });
   await chmod(outputDirectory, 0o700);
-  await writeFile(outputPath, renderResponseHtml(response), {
+  await copyPackagedAssets(appDirectory, outputDirectory);
+  await writeFile(outputPath, renderResponseHtml(response, appTemplate), {
     encoding: "utf8",
     mode: 0o600,
   });

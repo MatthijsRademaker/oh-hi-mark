@@ -1,12 +1,47 @@
-# OHM web review suite
+# OHM review app
 
-Future Vue 3/Vite browser workspace for rendering the latest harness response and editing a review scratchpad.
+Vue 3/Vite source for Pi `/ohm` local response review surface.
 
-This directory is intentionally documentation-only in the scaffold. Planned responsibilities:
+## Commands
 
-- render a response envelope as safe Markdown;
-- keep response and scratchpad scrolling independent;
-- persist notes by response identity;
-- expose accessible keyboard and responsive interactions.
+Bun is package manager and script runner.
 
-Candidate stack: Bun, Vue 3, `markdown-it`, DOMPurify, and Shiki. Confirm choices in an OpenSpec implementation change before creating the app or installing dependencies.
+```bash
+bun install
+bun run dev
+bun run typecheck
+bun run test
+bun run build
+```
+
+Production build writes committed runtime files to `.pi/extensions/ohm/generated/`. Build uses relative URLs plus file-protocol-safe classic IIFE output; do not switch entry back to external ES module, which Chromium blocks on `file://` pages.
+
+## Response contract
+
+App reads one non-executable JSON envelope from `#ohm-response`:
+
+```ts
+{
+  responseId: string
+  sessionId: string
+  entryId: string
+  text: string
+}
+```
+
+Pi owns capture and safe envelope serialization. Browser app never reads harness session files.
+
+## Markdown trust boundary
+
+- `markdown-it` parses response with raw HTML disabled.
+- DOMPurify sanitizes final generated HTML before `v-html` insertion.
+- Markdown image sources become inert labeled placeholders.
+- Links open separately with `noopener noreferrer`; unsafe protocols are omitted by parser/sanitizer policy.
+- Shiki core packages explicit local grammars and GitHub light/dark themes. Unsupported fences use plaintext.
+- Fonts, scripts, styles, icons, themes, and grammars are local. Response rendering performs no network fetches.
+
+Packaged grammars: Bash, CSS, diff, Go, HTML, JavaScript, JSON, JSX, Markdown, Python, Rust, SQL, TSX, TypeScript, Vue, and YAML.
+
+## Current scope
+
+One latest Pi response, document-first review, copy action, and system/light/dark preference. Scratchpad, response history, live refresh, Claude capture, and remote images remain out of scope.

@@ -1,13 +1,22 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm, stat } from "node:fs/promises";
+import {
+  mkdtemp,
+  mkdir,
+  readFile,
+  rm,
+  stat,
+  writeFile,
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import {
-  escapeHtml,
   getResponseHtmlPath,
   renderResponseHtml,
+  RESPONSE_PAYLOAD_PLACEHOLDER,
+  serializeResponseEnvelope,
   writeResponseHtml,
 } from "./html.ts";
 import { findLatestAssistantResponse } from "./response.ts";
@@ -17,8 +26,18 @@ const response = {
   responseId: "session-123:entry-456",
   sessionId: "session-123",
   entryId: "entry-456",
-  text: "Hello\n\n<em>not markup</em> & \"quoted\" 'text'",
+  text: "# Hello\n\n</script><script>alert('no')</script> & \u2028\u2029",
 };
+
+const appTemplate = `<!doctype html>
+<html lang="en">
+  <body>
+    <script id="ohm-response" type="application/json">${RESPONSE_PAYLOAD_PLACEHOLDER}</script>
+    <div id="app"></div>
+    <script type="module" src="./assets/app.js"></script>
+  </body>
+</html>
+`;
 
 function messageEntry(
   id: string,
@@ -26,6 +45,19 @@ function messageEntry(
   content: unknown,
 ): ResponseEntry {
   return { type: "message", id, message: { role, content } };
+}
+
+async function createPackagedApp(parentDirectory: string): Promise<string> {
+  const appDirectory = join(parentDirectory, "packaged-app");
+  const assetDirectory = join(appDirectory, "assets");
+  await mkdir(assetDirectory, { recursive: true });
+  await writeFile(join(appDirectory, "index.html"), appTemplate, "utf8");
+  await writeFile(
+    join(assetDirectory, "app.js"),
+    "console.log('OHM');",
+    "utf8",
+  );
+  return appDirectory;
 }
 
 test("finds newest assistant text on active branch", () => {
@@ -76,37 +108,73 @@ test("returns no response when branch has no assistant text", () => {
   assert.equal(result, undefined);
 });
 
-test("escapes response text and renders standalone document", () => {
-  const html = renderResponseHtml(response);
+test("injects exact response envelope without breaking script boundary", () => {
+  const html = renderResponseHtml(response, appTemplate);
+  const payload = html.match(
+    /<script id="ohm-response" type="application\/json">(.*?)<\/script>/s,
+  )?.[1];
 
-  assert.match(html, /^<!doctype html>/i);
-  assert.match(
-    html,
-    /<meta name="ohm-response-id" content="session-123:entry-456">/,
-  );
-  assert.match(
-    html,
-    /Hello\n\n&lt;em&gt;not markup&lt;\/em&gt; &amp; &quot;quoted&quot; &#39;text&#39;/,
-  );
-  assert.match(html, /white-space: pre-wrap/);
-  assert.match(html, /overflow-wrap: anywhere/);
-  assert.doesNotMatch(html, /<script\b/i);
+  assert.ok(payload);
+  assert.deepEqual(JSON.parse(payload), response);
+  assert.match(payload, /\\u003c\/script\\u003e/);
+  assert.match(payload, /\\u0026/);
+  assert.match(payload, /\\u2028\\u2029/);
+  assert.doesNotMatch(html, /<script>alert\('no'\)<\/script>/);
   assert.doesNotMatch(html, /https?:\/\//i);
 });
 
-test("uses deterministic response-specific path and private file modes", async () => {
+test("rejects missing or duplicate response placeholders", () => {
+  assert.throws(
+    () => renderResponseHtml(response, "<!doctype html>"),
+    /missing __OHM_RESPONSE_PAYLOAD__/,
+  );
+  assert.throws(
+    () =>
+      renderResponseHtml(
+        response,
+        `${RESPONSE_PAYLOAD_PLACEHOLDER}${RESPONSE_PAYLOAD_PLACEHOLDER}`,
+      ),
+    /multiple __OHM_RESPONSE_PAYLOAD__/,
+  );
+});
+
+test("serializes HTML-significant and separator characters safely", () => {
+  const serialized = serializeResponseEnvelope(response);
+
+  assert.doesNotMatch(serialized, /[<>&\u2028\u2029]/u);
+  assert.deepEqual(JSON.parse(serialized), response);
+});
+
+test("writes deterministic private app entry and refreshes local assets", async () => {
   const temporaryDirectory = await mkdtemp(join(tmpdir(), "ohm-test-"));
 
   try {
-    const firstPath = await writeResponseHtml(response, temporaryDirectory);
-    const secondPath = await writeResponseHtml(response, temporaryDirectory);
+    const appDirectory = await createPackagedApp(temporaryDirectory);
+    const runtimeDirectory = join(temporaryDirectory, "runtime");
+    const firstPath = await writeResponseHtml(
+      response,
+      runtimeDirectory,
+      appDirectory,
+    );
+    const staleAssetPath = join(dirname(firstPath), "assets", "stale.js");
+    await writeFile(staleAssetPath, "stale", "utf8");
+    const secondPath = await writeResponseHtml(
+      response,
+      runtimeDirectory,
+      appDirectory,
+    );
 
     assert.equal(firstPath, secondPath);
-    assert.equal(firstPath, getResponseHtmlPath(response, temporaryDirectory));
+    await assert.rejects(readFile(staleAssetPath, "utf8"), /ENOENT/);
+    assert.equal(firstPath, getResponseHtmlPath(response, runtimeDirectory));
     assert.equal(isAbsolute(firstPath), true);
     assert.equal(
       await readFile(firstPath, "utf8"),
-      renderResponseHtml(response),
+      renderResponseHtml(response, appTemplate),
+    );
+    assert.equal(
+      await readFile(join(dirname(firstPath), "assets", "app.js"), "utf8"),
+      "console.log('OHM');",
     );
 
     if (process.platform !== "win32") {
@@ -120,9 +188,35 @@ test("uses deterministic response-specific path and private file modes", async (
   }
 });
 
-test("escapes standalone values", () => {
-  assert.equal(
-    escapeHtml(`<script>alert("x")</script> & 'quoted'`),
-    "&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; &#39;quoted&#39;",
+test("reports missing packaged app with source path", async () => {
+  const temporaryDirectory = await mkdtemp(join(tmpdir(), "ohm-test-"));
+
+  try {
+    const missingDirectory = join(temporaryDirectory, "missing-app");
+    await assert.rejects(
+      writeResponseHtml(response, temporaryDirectory, missingDirectory),
+      (error: unknown) => {
+        assert.ok(error instanceof Error);
+        assert.match(error.message, /Could not read packaged OHM app at/);
+        assert.ok(error.message.includes(missingDirectory));
+        return true;
+      },
+    );
+  } finally {
+    await rm(temporaryDirectory, { recursive: true, force: true });
+  }
+});
+
+test("packaged Vue app contains response marker and local entry assets", async () => {
+  const extensionDirectory = dirname(fileURLToPath(import.meta.url));
+  const packagedIndex = await readFile(
+    join(extensionDirectory, "generated", "index.html"),
+    "utf8",
   );
+
+  assert.match(packagedIndex, new RegExp(RESPONSE_PAYLOAD_PLACEHOLDER));
+  assert.match(packagedIndex, /<script defer src="\.\/assets\//);
+  assert.match(packagedIndex, /\.\/assets\//);
+  assert.doesNotMatch(packagedIndex, /type="module"|crossorigin/i);
+  assert.doesNotMatch(packagedIndex, /https?:\/\//i);
 });
