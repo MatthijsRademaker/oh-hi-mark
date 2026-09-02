@@ -204,7 +204,7 @@ onUnmounted(() => {
             />
           </section>
 
-          <Scratchpad :response-id="envelope.responseId" />
+          <Scratchpad />
         </div>
       </template>
     </main>

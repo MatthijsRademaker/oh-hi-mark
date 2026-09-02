@@ -1,8 +1,8 @@
 ## ADDED Requirements
 
-### Requirement: Provide response-keyed scratchpad
+### Requirement: Provide ephemeral scratchpad
 
-The browser review application MUST render an accessible scratchpad alongside each valid assistant response. It MUST keep response content as primary surface, place scratchpad to the right on desktop, and stack scratchpad after response on narrow viewports without page-level horizontal clipping.
+The browser review application MUST render an accessible ephemeral scratchpad alongside each valid assistant response. It MUST keep response content as primary surface, place scratchpad to the right on desktop, and stack scratchpad after response on narrow viewports without page-level horizontal clipping.
 
 #### Scenario: Desktop response review
 
@@ -28,28 +28,42 @@ The desktop scratchpad MUST remain positioned near the viewport bottom-right whi
 - **WHEN** note content exceeds editor height
 - **THEN** editor scrolls vertically while scratchpad frame and response layout remain usable
 
-### Requirement: Persist notes by response identity
+### Requirement: Keep notes ephemeral
 
-The scratchpad MUST save note text to browser-local storage using stable response identity and MUST load only notes belonging to currently displayed response. It MUST expose a visible session-only status when browser storage is unavailable while retaining edits in memory.
+The scratchpad MUST keep note text in component memory only and MUST NOT write notes to browser-local storage, the filesystem, or a remote service.
 
-#### Scenario: Existing response note
+#### Scenario: Scratchpad reload
 
-- **WHEN** response with previously saved identity is opened
-- **THEN** its saved note is restored in scratchpad editor
+- **WHEN** scratchpad component is recreated
+- **THEN** note editor starts empty rather than restoring previous note text
 
-#### Scenario: Different response
+#### Scenario: Note entry
 
-- **WHEN** response identity changes to one with no saved note
-- **THEN** scratchpad is empty and notes from another response are not shown
+- **WHEN** user enters note text
+- **THEN** text remains available in current editor and no browser-local storage entry is created
 
-#### Scenario: Storage unavailable
+### Requirement: Copy notes to agent harness
 
-- **WHEN** browser-local storage read or write fails
-- **THEN** scratchpad remains editable and visibly reports that notes are session-only
+The scratchpad MUST provide an explicit copy action that copies exact note text to the clipboard for pasting into the agent harness. Empty note text MUST leave copy action disabled, and clipboard failure MUST be reported without clearing note text.
+
+#### Scenario: Copy note
+
+- **WHEN** user enters note text and activates copy action
+- **THEN** exact note text is copied and interface confirms it can be pasted into the agent harness
+
+#### Scenario: Empty note
+
+- **WHEN** scratchpad contains no non-whitespace text
+- **THEN** copy action is disabled
+
+#### Scenario: Clipboard failure
+
+- **WHEN** clipboard copy fails
+- **THEN** interface reports failure and retains note text for retry
 
 ### Requirement: Expose accessible note editing
 
-The scratchpad MUST expose a logical heading, an accessible name for its textarea, visible focus treatment, and live persistence status. Note text MUST remain plain textarea content and MUST NOT be interpreted as HTML.
+The scratchpad MUST expose a logical heading, an accessible name for its textarea, visible focus treatment, and live copy status. Note text MUST remain plain textarea content and MUST NOT be interpreted as HTML.
 
 #### Scenario: Keyboard note entry
 

@@ -1,59 +1,72 @@
-import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
-import { describe, expect, it } from "vitest";
+import { flushPromises, mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import Scratchpad from "@/components/Scratchpad.vue";
 
+const { copyMock } = vi.hoisted(() => ({
+  copyMock: vi.fn().mockResolvedValue(true),
+}));
+
+vi.mock("copy-to-clipboard", () => ({
+  default: copyMock,
+}));
+
 describe("Scratchpad", () => {
-  it("saves notes under response identity and restores them", async () => {
-    const first = mount(Scratchpad, {
-      props: { responseId: "session:entry-1" },
-    });
-    const textarea = first.get("textarea");
+  beforeEach(() => {
+    copyMock.mockClear();
+    window.localStorage.clear();
+  });
+
+  it("keeps notes ephemeral and copies exact text for the agent", async () => {
+    const wrapper = mount(Scratchpad);
+    const textarea = wrapper.get("textarea");
+    const copyButton = wrapper.get(
+      'button[aria-label="Copy scratchpad notes for agent harness"]',
+    );
 
     expect(textarea.attributes("aria-label")).toBe("Scratchpad notes");
-    expect(first.get("label").text()).toBe("Notes for this response");
-    expect(textarea.attributes("placeholder")).toContain("Capture");
+    expect(wrapper.get("label").text()).toBe(
+      "Notes to paste into your agent harness",
+    );
+    expect(copyButton.attributes("disabled")).toBeDefined();
+    expect(wrapper.text()).toContain("Nothing is saved locally.");
 
     await textarea.setValue("Check implementation details");
 
-    expect(window.localStorage.getItem("ohm-scratchpad:session:entry-1")).toBe(
-      "Check implementation details",
-    );
-    expect(
-      window.localStorage.getItem("ohm-scratchpad:session:entry-2"),
-    ).toBeNull();
+    expect(window.localStorage.length).toBe(0);
+    expect(copyButton.attributes("disabled")).toBeUndefined();
 
-    first.unmount();
+    await copyButton.trigger("click");
+    await flushPromises();
 
-    const restored = mount(Scratchpad, {
-      props: { responseId: "session:entry-1" },
-    });
-    await nextTick();
-
-    expect(
-      (restored.get("textarea").element as HTMLTextAreaElement).value,
-    ).toBe("Check implementation details");
-    expect(restored.get("h2").text()).toBe("Scratchpad");
-
-    restored.unmount();
-  });
-
-  it("does not carry notes to another response", async () => {
-    window.localStorage.setItem(
-      "ohm-scratchpad:session:entry-1",
-      "Private note",
+    expect(copyMock).toHaveBeenCalledWith("Check implementation details");
+    expect(wrapper.text()).toContain(
+      "Notes copied. Paste into your agent harness.",
     );
 
-    const wrapper = mount(Scratchpad, {
-      props: { responseId: "session:entry-2" },
-    });
-    await nextTick();
+    wrapper.unmount();
 
-    expect((wrapper.get("textarea").element as HTMLTextAreaElement).value).toBe(
+    const fresh = mount(Scratchpad);
+    expect((fresh.get("textarea").element as HTMLTextAreaElement).value).toBe(
       "",
     );
-    expect(wrapper.text()).toContain("Notes save locally with this response.");
+    fresh.unmount();
+  });
+
+  it("reports clipboard failure without hiding note text", async () => {
+    copyMock.mockResolvedValueOnce(false);
+    const wrapper = mount(Scratchpad);
+    await wrapper.get("textarea").setValue("Keep this visible");
+
+    await wrapper
+      .get('button[aria-label="Copy scratchpad notes for agent harness"]')
+      .trigger("click");
+    await flushPromises();
+
+    expect(wrapper.text()).toContain("Could not copy notes.");
+    expect((wrapper.get("textarea").element as HTMLTextAreaElement).value).toBe(
+      "Keep this visible",
+    );
 
     wrapper.unmount();
   });

@@ -11,7 +11,7 @@ OHM (Open Harness Markdown) is a local review workspace for LLM output. The inte
 3. The response is rendered as safe, readable Markdown.
 4. A scratchpad stays available while the coder scrolls and reviews.
 
-Full OHM workspace remains scaffolded. Pi `/ohm` now captures the latest text response on the active branch, writes a response-specific local app handoff in the OS temporary directory, and requests the default browser to open it. Vue review UI renders safe Markdown with a response-keyed local scratchpad. Claude capture, response history, and live refresh are not implemented.
+Full OHM workspace remains scaffolded. Pi `/ohm` now captures the latest text response on the active branch, writes a response-specific local app handoff in the OS temporary directory, and requests the default browser to open it. Vue review UI renders safe Markdown with an ephemeral scratchpad and agent-harness copy action. Claude capture, response history, and live refresh are not implemented.
 
 ## Working rules
 
@@ -77,7 +77,7 @@ The future `web/` suite uses Vue 3, Vite, and Bun. Markdown rendering should use
 Read `designs/ohm-review-workbench.md` before changing review layout, scrolling, scratchpad behavior, or visual language. Preserve:
 
 - independent response and scratchpad scrolling;
-- stable response identity for saved notes;
+- stable response identity for displayed response metadata;
 - keyboard accessibility and visible focus;
 - responsive behavior without horizontal clipping;
 - safe handling of Markdown, links, code, and images.

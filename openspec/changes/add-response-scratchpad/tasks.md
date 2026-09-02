@@ -1,12 +1,12 @@
 ## 1. Scratchpad surface
 
-- [x] 1.1 Add dedicated accessible scratchpad component with plain-text note editor and local persistence status.
+- [x] 1.1 Add dedicated accessible scratchpad component with plain-text note editor and copy feedback status.
 - [x] 1.2 Integrate response-and-scratchpad grid with desktop right column, bottom-sticky positioning, and narrow-screen stacking.
 
-## 2. Response identity and verification
+## 2. Copy action and verification
 
-- [x] 2.1 Key browser storage to response identity and isolate notes across response changes, including storage fallback behavior.
-- [x] 2.2 Add component and App integration tests for editor accessibility, note persistence, and response isolation.
+- [x] 2.1 Keep notes ephemeral and add explicit clipboard copy for agent-harness pasting.
+- [x] 2.2 Add component and App integration tests for editor accessibility, copy feedback, and no local storage.
 
 ## 3. Runtime and documentation
 

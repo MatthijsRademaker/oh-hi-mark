@@ -1,6 +1,6 @@
 # OHM review workbench
 
-Status: Pi latest-response document view and response-keyed scratchpad implemented.
+Status: Pi latest-response document view and ephemeral copyable scratchpad implemented.
 
 ## Product intent
 
@@ -8,7 +8,7 @@ Make long LLM responses easier to inspect without losing the agent conversation.
 
 ## Implemented Pi slice
 
-Current `/ohm` view is a polished responsive response-and-scratchpad layout with sticky metadata/actions, safe Markdown, local code highlighting, copy control, system/light/dark themes, and locally persisted response-keyed notes. It opens directly from private `file://` handoff and has no history, live refresh, or Claude capture.
+Current `/ohm` view is a polished responsive response-and-scratchpad layout with sticky metadata/actions, safe Markdown, local code highlighting, copy control, system/light/dark themes, and ephemeral notes with one-click agent-harness copy. It opens directly from private `file://` handoff and has no history, live refresh, or Claude capture.
 
 ## Layout direction
 
@@ -28,10 +28,10 @@ Desktop may use a split view. Narrow screens should stack response before scratc
 
 ## Interaction principles
 
-- Preserve response identity across refreshes so notes do not attach to wrong output.
+- Preserve response identity across refreshes for clear response metadata.
 - Keep response and scratchpad scroll positions independent.
 - Keep scratchpad visible at desktop viewport bottom while long responses scroll.
-- Save notes locally under response identity, and show when local storage is unavailable.
+- Keep notes in memory only; make copying them into the agent harness one action.
 - Make copy, open-source, and note actions keyboard reachable.
 - Keep metadata visible but subordinate to response content.
 - Show source state clearly when no response has arrived.

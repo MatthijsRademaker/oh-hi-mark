@@ -6,7 +6,7 @@ OHM (Open Harness Markdown) is planned as a local browser review workspace for L
 
 Pi `/ohm` captures the active branch's latest assistant text and opens a polished local Vue review application from a private temporary file. The app renders sanitized Markdown, highlights common code languages with Shiki, provides system/light/dark themes and copy controls, and makes no response-triggered image requests.
 
-Scratchpad notes persist locally per response identity. Claude capture, response history, and live refresh remain scaffolded.
+Scratchpad notes stay in memory until copied into the agent harness. Claude capture, response history, and live refresh remain scaffolded.
 
 ## Planned flow
 
@@ -19,7 +19,7 @@ latest assistant response
        ▼
 local transport + Vue review suite
        ├── safe Markdown rendering
-       └── synchronized review scratchpad
+       └── copyable review scratchpad
 ```
 
 ## Repository setup
