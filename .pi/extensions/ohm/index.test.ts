@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import {
   mkdtemp,
   mkdir,
+  readdir,
   readFile,
   rm,
   stat,
@@ -183,6 +184,26 @@ test("writes deterministic private app entry and refreshes local assets", async 
       assert.equal(directoryMode, 0o700);
       assert.equal(fileMode, 0o600);
     }
+  } finally {
+    await rm(temporaryDirectory, { recursive: true, force: true });
+  }
+});
+
+test("resolves packaged assets beside extension module", async () => {
+  const temporaryDirectory = await mkdtemp(join(tmpdir(), "ohm-test-"));
+
+  try {
+    const outputPath = await writeResponseHtml(response, temporaryDirectory);
+    const extensionDirectory = dirname(fileURLToPath(import.meta.url));
+    const packagedAssets = (
+      await readdir(join(extensionDirectory, "generated", "assets"))
+    ).sort();
+    const copiedAssets = (
+      await readdir(join(dirname(outputPath), "assets"))
+    ).sort();
+
+    assert.deepEqual(copiedAssets, packagedAssets);
+    assert.match(await readFile(outputPath, "utf8"), /ohm-response/);
   } finally {
     await rm(temporaryDirectory, { recursive: true, force: true });
   }

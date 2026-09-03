@@ -1,0 +1,6 @@
+{
+  "responseId": "browser-smoke:response-1",
+  "sessionId": "browser-smoke",
+  "entryId": "response-1",
+  "text": "# Offline review\n\nResponse content stays visible while untrusted markup stays inert.\n\n<script>window.__ohmHostileScript = true</script>\n\n<div onclick=\"window.__ohmHostileHandler = true\">hostile HTML</div>\n\n[Unsafe link](javascript:alert('unsafe'))\n\n![Private image](https://tracking.invalid/pixel.png)\n\n## Keyboard review\n\n```ts\nconst localOnly = true\n```"
+}
