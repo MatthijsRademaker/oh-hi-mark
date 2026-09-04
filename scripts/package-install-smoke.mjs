@@ -244,10 +244,7 @@ export async function runInstalledPackageSmoke(packageDirectory, label) {
   const runtimeDirectory = join(temporaryDirectory, "runtime");
   const launcherDirectory = join(temporaryDirectory, "bin");
   const launcherLog = join(temporaryDirectory, "browser-launch.txt");
-  const launcherPath = join(
-    launcherDirectory,
-    getSmokeBrowserLauncher(),
-  );
+  const launcherPath = join(launcherDirectory, getSmokeBrowserLauncher());
   const sessionPath = join(projectDirectory, "session.jsonl");
 
   try {
