@@ -166,7 +166,7 @@
     url("./assets/background-light-mode.png");
   background-position: center top;
   background-repeat: no-repeat;
-  background-size: 100% 100%, 100% auto;
+  background-size: 100% 100%, cover;
   content: "";
   pointer-events: none;
 }
@@ -175,6 +175,7 @@
   background-image:
     linear-gradient(to bottom, transparent 68%, color-mix(in srgb, var(--background) 18%, transparent)),
     url("./assets/background-dark-mode.png");
+  background-size: 100% 100%, cover;
 }
 
 /* Brand and header */
