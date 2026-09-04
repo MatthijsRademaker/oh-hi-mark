@@ -28,6 +28,19 @@ async function pathExists(path) {
   }
 }
 
+function getSmokeBrowserLauncher() {
+  if (process.platform === "darwin") return "open";
+  if (process.platform === "win32") return "rundll32";
+  return "xdg-open";
+}
+
+function getSmokeBrowserLauncherScript() {
+  if (process.platform === "win32") {
+    return '@echo off\r\necho %2>"%OHM_SMOKE_LAUNCH_LOG%"\r\n';
+  }
+  return '#!/bin/sh\nprintf "%s" "$1" > "$OHM_SMOKE_LAUNCH_LOG"\n';
+}
+
 async function waitForFile(path, timeoutMs) {
   const startedAt = Date.now();
   while (Date.now() - startedAt < timeoutMs) {
@@ -199,24 +212,27 @@ async function runPiCommand(
     });
   });
 
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  child.stdin.write(
-    `${JSON.stringify({ id: "ohm", type: "prompt", message: "/ohm" })}\n`,
-  );
-  const rpcResponse = await response;
-  if (!rpcResponse.success)
-    fail(`Pi rejected /ohm: ${JSON.stringify(rpcResponse)}`);
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    child.stdin.write(
+      `${JSON.stringify({ id: "ohm", type: "prompt", message: "/ohm" })}\n`,
+    );
+    const rpcResponse = await response;
+    if (!rpcResponse.success)
+      fail(`Pi rejected /ohm: ${JSON.stringify(rpcResponse)}`);
 
-  await waitForFile(launcherLog, 5_000);
-  child.kill("SIGTERM");
-  await new Promise((resolve) => {
-    if (exitCode !== undefined) {
-      resolve();
-      return;
-    }
-    child.once("exit", resolve);
-    setTimeout(resolve, 2_000);
-  });
+    await waitForFile(launcherLog, 5_000);
+  } finally {
+    if (exitCode === undefined) child.kill("SIGTERM");
+    await new Promise((resolve) => {
+      if (exitCode !== undefined) {
+        resolve();
+        return;
+      }
+      child.once("exit", resolve);
+      setTimeout(resolve, 2_000);
+    });
+  }
 }
 
 export async function runInstalledPackageSmoke(packageDirectory, label) {
@@ -228,7 +244,10 @@ export async function runInstalledPackageSmoke(packageDirectory, label) {
   const runtimeDirectory = join(temporaryDirectory, "runtime");
   const launcherDirectory = join(temporaryDirectory, "bin");
   const launcherLog = join(temporaryDirectory, "browser-launch.txt");
-  const launcherPath = join(launcherDirectory, "xdg-open");
+  const launcherPath = join(
+    launcherDirectory,
+    getSmokeBrowserLauncher(),
+  );
   const sessionPath = join(projectDirectory, "session.jsonl");
 
   try {
@@ -238,11 +257,7 @@ export async function runInstalledPackageSmoke(packageDirectory, label) {
       mkdir(runtimeDirectory, { recursive: true }),
       mkdir(launcherDirectory, { recursive: true }),
     ]);
-    await writeFile(
-      launcherPath,
-      '#!/bin/sh\nprintf "%s" "$1" > "$OHM_SMOKE_LAUNCH_LOG"\n',
-      "utf8",
-    );
+    await writeFile(launcherPath, getSmokeBrowserLauncherScript(), "utf8");
     await chmod(launcherPath, 0o755);
     await createSessionFixture(sessionPath, projectDirectory);
 
@@ -281,7 +296,8 @@ export async function runInstalledPackageSmoke(packageDirectory, label) {
     };
     await runPiCommand(projectDirectory, sessionPath, environment, launcherLog);
 
-    const outputPath = (await readFile(launcherLog, "utf8")).trim();
+    const launcherOutput = await readFile(launcherLog, "utf8");
+    const outputPath = launcherOutput.trim();
     const expectedRuntimePrefix = `${join(runtimeDirectory, "ohm")}${sep}`;
     if (!outputPath.startsWith(expectedRuntimePrefix)) {
       fail(

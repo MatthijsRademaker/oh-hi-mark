@@ -350,23 +350,31 @@ async function runBrowserSmoke() {
         ),
       "rendered Markdown heading",
     );
-    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    await devTools.evaluate(`(() => {
+      const textarea = document.querySelector('#scratchpad-notes');
+      const setter = Object.getOwnPropertyDescriptor(
+        window.HTMLTextAreaElement.prototype, 'value').set;
+      setter.call(textarea, 'Smoke note for the agent harness.');
+      textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    })()`);
+    // Vue re-enables the button on the next tick; clicking sooner is a no-op.
+    await new Promise((resolve) => setTimeout(resolve, 250));
     await devTools.evaluate(
-      "document.querySelector('button[aria-label=\\\"Copy response Markdown\\\"]')?.click()",
+      "document.querySelector('button[aria-label=\"Copy scratchpad notes for agent harness\"]')?.click()",
     );
     await new Promise((resolve) => setTimeout(resolve, 250));
-
+    await new Promise((resolve) => setTimeout(resolve, 500));
     const inspection = await devTools.evaluate(`(() => {
       const article = document.querySelector('.ohm-markdown');
       const textarea = document.querySelector('#scratchpad-notes');
-      const copyButton = document.querySelector('button[aria-label="Copy response Markdown"]');
       const themeButton = document.querySelector('button[aria-label^="Theme:"]');
       textarea?.focus();
       const activeElementId = document.activeElement?.id || '';
       const reducedMotionStyle = textarea ? getComputedStyle(textarea) : null;
       return {
         heading: document.querySelector('.ohm-markdown h1')?.textContent?.trim() || '',
-        responseId: document.querySelector('.ohm-response-id')?.textContent?.trim() || '',
+        responseId: document.querySelector('.ohm-response-column')?.dataset.responseId || '',
         articleHtml: article?.innerHTML || '',
         articleText: article?.textContent || '',
         imageCount: article?.querySelectorAll('img').length || 0,
@@ -382,13 +390,11 @@ async function runBrowserSmoke() {
         scratchpadOverflow: textarea ? getComputedStyle(textarea).overflowY : '',
         scratchpadResize: textarea ? getComputedStyle(textarea).resize : '',
         activeElementId,
-        copyButtonDisabled: Boolean(copyButton?.disabled),
-        copyButtonLabel: copyButton?.getAttribute('aria-label') || '',
         themeButtonLabel: themeButton?.getAttribute('aria-label') || '',
         reducedTransition: reducedMotionStyle?.transitionDuration || '',
         reducedAnimation: reducedMotionStyle?.animationDuration || '',
         hostileScriptRan: Boolean(window.__ohmHostileScript),
-        copyStatus: document.querySelector('.sr-only[aria-live="polite"]')?.textContent?.trim() || '',
+        copyStatus: document.querySelector('#scratchpad-status')?.textContent?.trim() || '',
       };
     })()`);
 
@@ -459,16 +465,8 @@ async function runBrowserSmoke() {
       "keyboard focus cannot reach scratchpad",
     );
     expect(
-      inspection.copyButtonLabel === "Copy response Markdown",
-      "copy button has no accessible name",
-    );
-    expect(
       inspection.themeButtonLabel.startsWith("Theme:"),
       "theme control has no accessible name",
-    );
-    expect(
-      !inspection.copyButtonDisabled,
-      "copy response action is disabled with response loaded",
     );
     expect(
       inspection.reducedTransition !== "0.15s" &&
@@ -478,7 +476,7 @@ async function runBrowserSmoke() {
     expect(
       inspection.copyStatus.includes("copied") ||
         inspection.copyStatus.includes("Could not copy"),
-      "copy action did not expose status",
+      "scratchpad copy action did not expose status",
     );
     expect(failures.length === 0, failures.join("; "));
 

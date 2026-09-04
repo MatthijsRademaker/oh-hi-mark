@@ -435,7 +435,7 @@
   min-height: 13.5rem;
   max-height: calc(100svh - 18.5rem);
   margin-top: 1.25rem;
-  resize: none;
+  resize: vertical;
   overflow-y: auto;
   border: 0;
   border-radius: 0;
@@ -454,6 +454,11 @@
   font-size: 0.94rem;
   line-height: 1.65;
   transition: background 150ms ease, box-shadow 150ms ease;
+}
+
+/* Keep the drag capability, drop the native grabber that broke the edge. */
+.ohm-scratchpad-notes::-webkit-resizer {
+  display: none;
 }
 
 .ohm-scratchpad-notes::placeholder {

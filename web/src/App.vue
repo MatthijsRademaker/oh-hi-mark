@@ -129,6 +129,7 @@ onUnmounted(() => {
           </div>
 
           <section
+            :data-response-id="envelope.responseId"
             aria-labelledby="response-heading"
             class="ohm-response-column mx-auto w-full max-w-3xl"
           >
