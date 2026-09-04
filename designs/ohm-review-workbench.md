@@ -8,13 +8,13 @@ Make long LLM responses easier to inspect without losing the agent conversation.
 
 ## Implemented Pi slice
 
-Current `/ohm` view is a polished responsive response-and-scratchpad layout with sticky metadata/actions, safe Markdown, local code highlighting, copy control, system/light/dark themes, and ephemeral notes with one-click agent-harness copy. It opens directly from private `file://` handoff and has no history, live refresh, or Claude capture.
+Current `/ohm` view is a polished responsive response-and-scratchpad layout with safe Markdown, local code highlighting, system/light/dark themes, and ephemeral notes with one-click agent-harness copy. Chrome is deliberately minimal: the header carries the brand and the theme control only, and response identity stays internal rather than being printed on the page. It opens directly from private `file://` handoff and has no history, live refresh, or Claude capture.
 
 ## Layout direction
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
-│ OHM · response metadata                         open / copy │
+│ OHM                                                   theme │
 ├───────────────────────────────────────┬─────────────────────┤
 │                                       │                     │
 │ rendered assistant response           │ review scratchpad   │
@@ -28,12 +28,11 @@ Desktop may use a split view. Narrow screens should stack response before scratc
 
 ## Interaction principles
 
-- Preserve response identity across refreshes for clear response metadata.
+- Preserve response identity across refreshes as the scratchpad's join key. It is not surfaced in the UI.
 - Keep response and scratchpad scroll positions independent.
-- Keep scratchpad visible at desktop viewport bottom while long responses scroll.
+- Anchor the scratchpad level with the first line of the response, then keep it pinned below the header while long responses scroll.
 - Keep notes in memory only; make copying them into the agent harness one action.
-- Make copy, open-source, and note actions keyboard reachable.
-- Keep metadata visible but subordinate to response content.
+- Make theme and note actions keyboard reachable.
 - Show source state clearly when no response has arrived.
 - Treat links, raw HTML, images, and code as explicit trust boundaries.
 - Respect reduced-motion preferences.

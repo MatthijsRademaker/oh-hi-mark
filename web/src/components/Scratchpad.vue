@@ -38,23 +38,12 @@ onUnmounted(() => {
 
 <template>
   <aside class="ohm-scratchpad" aria-labelledby="scratchpad-heading">
-    <div class="ohm-scratchpad-card">
-      <span class="ohm-panel-corner ohm-panel-corner-top" aria-hidden="true" />
-      <span class="ohm-panel-corner ohm-panel-corner-bottom" aria-hidden="true" />
-      <span class="ohm-scratch-bamboo" aria-hidden="true" />
-
+    <div class="ohm-scratchpad-card ohm-wash">
       <div class="ohm-scratchpad-header">
-        <div>
-          <div class="ohm-calligraphy-label" aria-hidden="true">
-            批注 <span class="ohm-seal">记</span>
-          </div>
-          <p class="ohm-eyebrow">Review notes</p>
-          <h2 id="scratchpad-heading">Scratchpad</h2>
+        <div class="ohm-calligraphy-label" aria-hidden="true">
+          批注 <span class="ohm-seal">记</span>
         </div>
-        <span class="ohm-unsaved-badge">
-          <InkBrushStroke />
-          <span>Not saved</span>
-        </span>
+        <h2 id="scratchpad-heading" class="ohm-eyebrow">Review notes</h2>
       </div>
 
       <label for="scratchpad-notes" class="sr-only">Notes to paste into your agent harness</label>
@@ -71,7 +60,7 @@ onUnmounted(() => {
 
       <div class="ohm-scratchpad-footer">
         <p id="scratchpad-status" role="status" aria-live="polite">
-          {{ copyStatus === 'copied' ? 'Notes copied. Paste into your agent harness.' : copyStatus === 'failed' ? 'Could not copy notes.' : 'Nothing is saved locally.' }}
+          {{ copyStatus === 'copied' ? 'Notes copied. Paste into your agent harness.' : copyStatus === 'failed' ? 'Could not copy notes.' : '' }}
         </p>
         <Button
           type="button"

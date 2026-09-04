@@ -15,13 +15,12 @@ import typescript from "@shikijs/langs/typescript";
 import vue from "@shikijs/langs/vue";
 import yaml from "@shikijs/langs/yaml";
 import { fromHighlighter } from "@shikijs/markdown-it/core";
-import githubDarkDefault from "@shikijs/themes/github-dark-default";
-import githubLightDefault from "@shikijs/themes/github-light-default";
 import DOMPurify from "dompurify";
 import MarkdownIt from "markdown-it";
 import { createHighlighterCore } from "shiki/core";
 import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import type { BundledLanguage } from "shiki";
+import { ohmInkDark, ohmInkLight } from "./shiki/ohm-ink";
 import wasm from "shiki/wasm";
 
 const supportedLanguages = [
@@ -68,6 +67,18 @@ async function createMarkdownParser() {
     return renderer.renderToken(tokens, index, options);
   };
 
+  parser.renderer.rules.blockquote_open = (
+    tokens,
+    index,
+    options,
+    _environment,
+    renderer,
+  ) => {
+    // Quoted text needs a ground to stay readable over the painting.
+    tokens[index].attrJoin("class", "ohm-wash");
+    return renderer.renderToken(tokens, index, options);
+  };
+
   parser.renderer.rules.image = (tokens, index) => {
     const label = tokens[index].content.trim() || "Unlabeled image";
     return `<span class="ohm-image-placeholder" role="note">Image omitted: ${parser.utils.escapeHtml(label)}</span>`;
@@ -76,17 +87,26 @@ async function createMarkdownParser() {
   const highlighter = await createHighlighterCore({
     engine: createOnigurumaEngine(wasm),
     langs: supportedLanguages,
-    themes: [githubLightDefault, githubDarkDefault],
+    themes: [ohmInkLight, ohmInkDark],
   });
 
   parser.use(
     fromHighlighter(highlighter, {
       themes: {
-        light: "github-light-default",
-        dark: "github-dark-default",
+        light: "ohm-ink-light",
+        dark: "ohm-ink-dark",
       },
       defaultLanguage: plainTextLanguage,
       fallbackLanguage: plainTextLanguage,
+      transformers: [
+        {
+          // Marks the slab so CSS can fade its edges into the reading column.
+          name: "ohm-slab",
+          pre(node) {
+            this.addClassToHast(node, "ohm-slab");
+          },
+        },
+      ],
     }),
   );
 

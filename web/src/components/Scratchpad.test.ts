@@ -29,7 +29,6 @@ describe("Scratchpad", () => {
       "Notes to paste into your agent harness",
     );
     expect(copyButton.attributes("disabled")).toBeDefined();
-    expect(wrapper.text()).toContain("Nothing is saved locally.");
 
     await textarea.setValue("Check implementation details");
 

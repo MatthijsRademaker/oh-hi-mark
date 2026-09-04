@@ -1,0 +1,62 @@
+/*
+  Ink-wash surfaces.
+
+  OHM has no bordered cards. A surface is separated from the painting behind it
+  by pigment density alone: a translucent veil whose alpha thins out unevenly at
+  the edge. Nothing here draws a stroke, and nothing blurs the artwork.
+
+  The veil lives on a pseudo-element that bleeds past the content box, so the
+  soft edge falls outside the padding and never eats into text or inputs.
+*/
+
+:root {
+  --ohm-wash-veil: color-mix(in srgb, var(--ohm-paper) 72%, transparent);
+  --ohm-wash-sheen: color-mix(in srgb, var(--ohm-ink) 5%, transparent);
+}
+
+.dark {
+  --ohm-wash-veil: color-mix(in srgb, var(--ohm-ink) 76%, transparent);
+  --ohm-wash-sheen: color-mix(in srgb, var(--ohm-paper) 5%, transparent);
+}
+
+.ohm-wash {
+  --ohm-wash-bleed-x: 1.5rem;
+  --ohm-wash-bleed-y: 2rem;
+  position: relative;
+  isolation: isolate;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.ohm-wash::before {
+  position: absolute;
+  z-index: -1;
+  inset: calc(-1 * var(--ohm-wash-bleed-y)) calc(-1 * var(--ohm-wash-bleed-x));
+  background:
+    radial-gradient(120% 90% at 22% 0%, var(--ohm-wash-sheen), transparent 62%),
+    linear-gradient(97deg, transparent 0 8%, var(--ohm-wash-sheen) 52%, transparent 88%),
+    var(--ohm-wash-veil);
+  content: "";
+  mask-image: url("./assets/wash-mask.svg");
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+  pointer-events: none;
+}
+
+/*
+  Ink slab: a different material from the wash panels. It stays opaque so code
+  keeps its contrast, and dissolves into the column with an even, measured fade
+  rather than the noise mask, which would distort at slab proportions.
+*/
+.ohm-slab {
+  --ohm-slab-fade: 1.15rem;
+  border: 0;
+  border-radius: 0;
+  mask-image:
+    linear-gradient(to bottom, transparent, #000 var(--ohm-slab-fade), #000 calc(100% - var(--ohm-slab-fade)), transparent),
+    linear-gradient(to right, transparent, #000 var(--ohm-slab-fade), #000 calc(100% - var(--ohm-slab-fade)), transparent);
+  mask-composite: intersect;
+  mask-repeat: no-repeat;
+}

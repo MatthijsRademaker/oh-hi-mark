@@ -1,15 +1,12 @@
-import { flushPromises, mount } from "@vue/test-utils";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { mount } from "@vue/test-utils";
+import { describe, expect, it, vi } from "vitest";
 
 import App from "@/App.vue";
 import { RESPONSE_ENVELOPE_ELEMENT_ID } from "@/response-envelope";
 
-const { copyMock } = vi.hoisted(() => ({
-  copyMock: vi.fn().mockResolvedValue(true),
-}));
-
+// Scratchpad mounts inside App and reaches for the clipboard.
 vi.mock("copy-to-clipboard", () => ({
-  default: copyMock,
+  default: vi.fn().mockResolvedValue(true),
 }));
 
 const envelope = {
@@ -28,11 +25,7 @@ function embed(payload: string): void {
 }
 
 describe("OHM review shell", () => {
-  beforeEach(() => {
-    copyMock.mockClear();
-  });
-
-  it("renders response identity, Markdown, and accessible actions", async () => {
+  it("renders Markdown and accessible review surfaces", async () => {
     embed(JSON.stringify(envelope));
     const wrapper = mount(App);
 
@@ -40,7 +33,6 @@ describe("OHM review shell", () => {
       expect(wrapper.find(".ohm-markdown h1").text()).toBe("Reviewed response");
     });
 
-    expect(wrapper.text()).toContain("session:entry");
     expect(
       wrapper.find('aside[aria-labelledby="scratchpad-heading"]').exists(),
     ).toBe(true);
@@ -48,18 +40,6 @@ describe("OHM review shell", () => {
       wrapper.find('textarea[aria-label="Scratchpad notes"]').exists(),
     ).toBe(true);
     expect(wrapper.find('button[aria-label^="Theme:"]').exists()).toBe(true);
-    expect(
-      wrapper.find('button[aria-label="Copy response Markdown"]').exists(),
-    ).toBe(true);
-
-    await wrapper
-      .get('button[aria-label="Copy response Markdown"]')
-      .trigger("click");
-    await flushPromises();
-
-    expect(copyMock).toHaveBeenCalledWith(envelope.text);
-    expect(wrapper.text()).toContain("Copied");
-    expect(wrapper.text()).toContain("Response Markdown copied to clipboard.");
 
     wrapper.unmount();
   });
