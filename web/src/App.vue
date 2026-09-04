@@ -6,7 +6,6 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import OhmLogo from '@/components/OhmLogo.vue'
 import Scratchpad from '@/components/Scratchpad.vue'
-import { Separator } from '@/components/ui/separator'
 import { renderMarkdown } from '@/markdown'
 import { readResponseEnvelope } from '@/response-envelope'
 import type { ResponseEnvelope } from '@/response-envelope'
@@ -119,18 +118,9 @@ onUnmounted(() => {
 
       <template v-else-if="envelope">
         <div class="ohm-review-grid">
-          <div class="ohm-review-masthead mx-auto w-full max-w-3xl">
-            <div class="ohm-title-line">
-              <h1 id="response-heading">Read with room to think.</h1>
-              <span class="ohm-seal ohm-title-seal" aria-hidden="true">阅</span>
-            </div>
-
-            <Separator class="ohm-divider" />
-          </div>
-
           <section
             :data-response-id="envelope.responseId"
-            aria-labelledby="response-heading"
+            aria-label="Agent response"
             class="ohm-response-column mx-auto w-full max-w-3xl"
           >
             <div v-if="isRendering" class="ohm-rendering" role="status">
@@ -142,7 +132,6 @@ onUnmounted(() => {
             <article
               v-else
               class="ohm-markdown prose prose-neutral max-w-none dark:prose-invert"
-              aria-labelledby="response-heading"
               v-html="renderedMarkdown"
             />
           </section>

@@ -286,17 +286,8 @@
   column-gap: clamp(2.25rem, 5vw, 4.75rem);
 }
 
-/*
-  The title owns its own row so the scratchpad can start level with the first
-  line of the response instead of with the masthead. Placement, not a magic
-  offset, keeps the two aligned as the title wraps.
-*/
-.ohm-review-masthead {
-  grid-area: 1 / 1;
-}
-
 .ohm-response-column {
-  grid-area: 2 / 1;
+  grid-area: 1 / 1;
   min-width: 0;
 }
 
@@ -308,62 +299,6 @@
   letter-spacing: 0.22em;
   line-height: 1.4;
   text-transform: uppercase;
-}
-
-.ohm-title-line {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.ohm-title-line h1 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(2.45rem, 5vw, 3.8rem);
-  font-weight: 600;
-  letter-spacing: 0.015em;
-  line-height: 1.05;
-  text-wrap: balance;
-}
-
-.ohm-title-seal {
-  width: 1.35rem;
-  height: 1.8rem;
-  flex: 0 0 auto;
-  transform: rotate(2deg);
-  opacity: 0.82;
-}
-
-.ohm-review-masthead .ohm-divider {
-  position: relative;
-  height: 1px;
-  margin-top: 1.5rem;
-  margin-bottom: 2.35rem;
-  overflow: visible;
-  background: linear-gradient(to right, var(--foreground), color-mix(in srgb, var(--foreground) 12%, transparent), transparent);
-  opacity: 0.55;
-}
-
-.ohm-divider::before,
-.ohm-divider::after {
-  position: absolute;
-  top: -2px;
-  width: 8px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--foreground);
-  content: "";
-  transform: skewX(-20deg);
-}
-
-.ohm-divider::before {
-  left: 0.3rem;
-}
-
-.ohm-divider::after {
-  left: 1.55rem;
-  width: 5px;
-  opacity: 0.65;
 }
 
 .ohm-rendering {
@@ -391,9 +326,9 @@
 
 /* Scratchpad panel */
 .ohm-scratchpad {
-  grid-area: 2 / 2;
+  grid-area: 1 / 2;
   position: sticky;
-  top: 5.5rem;
+  top: max(5.5rem, calc(100svh - 25rem));
   align-self: start;
   min-width: 0;
 }
@@ -859,8 +794,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  /* Stacked: fall back to source order instead of the two-row placement. */
-  .ohm-review-masthead,
+  /* Stacked: fall back to source order. */
   .ohm-response-column,
   .ohm-scratchpad {
     grid-area: auto;
@@ -906,16 +840,6 @@
   .ohm-main {
     padding-top: 2.4rem;
   }
-
-  .ohm-title-line {
-    align-items: flex-start;
-    gap: 0.7rem;
-  }
-
-  .ohm-title-line h1 {
-    font-size: clamp(2.2rem, 12vw, 3rem);
-  }
-
 
   .ohm-scratchpad-card {
     padding: 1.15rem;

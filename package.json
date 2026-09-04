@@ -1,6 +1,6 @@
 {
   "name": "oh-hi-mark",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Local Markdown review surface for Pi assistant responses",
   "type": "module",
   "license": "MIT",
